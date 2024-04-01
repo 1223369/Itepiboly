@@ -1,0 +1,94 @@
+body,div,h3,h4,h5,input,textarea,select,p,dl,dt,dd,a,i,strong,img,button,form,table,th,tr,td,tbody{
+  margin:0;
+  padding:0;
+}
+input {
+  resize: none;
+  border: none;
+}
+
+img{
+  border: none;
+}
+
+a{
+  text-decoration: none;
+  color: #fe9527;
+}
+body {
+  color: #333333;
+  min-height: 100vh;
+  background: #ffffff;
+  font-size: 0.64rem;
+  font-family: 'Microsoft YaHei';
+}
+
+textarea {
+  line-height: 1.2rem !important;
+}
+
+// .van-nav-bar .van-icon{
+//   color: #333333;
+// }
+
+// .van-button--primary{
+//   background: linear-gradient(90deg, #FEA829, #FE8F27);
+//   border-radius: 1.17rem;
+//   border: none;
+//   font-size: 0.96rem;
+// }
+
+// .van-checkbox__icon{
+//   height: 0.75rem;
+//   font-size: 0.8rem;
+// }
+
+// .van-checkbox__icon .van-icon{
+//   width: 0.75rem;
+//   height: 0.75rem;
+//   line-height: 0.75rem;
+// }
+// .van-loading{
+//   text-align: center;
+//   margin-top: 1rem;
+// }
+
+// .wy-no-data{
+//   width: 8.96rem;
+//   height: 5.73rem;
+//   background: url('@/assets/img/icon/icon-no-data.png') no-repeat;
+//   background-size: 100%;
+//   padding-top: 7.5rem;
+//   text-align: center;
+//   font-size: 0.75rem;
+//   font-weight: 400;
+//   color: #666666;
+//   margin: 6rem auto 0;
+// }
+
+// .resume-label{
+//   padding: 1.28rem 0 1.09rem;
+//   margin: 0 0.56rem;
+//   border-bottom: 1px solid #F3F3F3;
+// }
+
+// .resume-label h3{
+//   font-size: 0.96rem;
+//   line-height: 0.96rem;
+//   font-weight: 400;
+//   color: #333333;
+//   display: flex;
+//   justify-content: space-between;
+//   margin-bottom: 0.77rem;
+// }
+
+// .resume-label h4{
+//   line-height: 0.8rem;
+//   font-size: 0.8rem;
+//   font-weight: 400;
+//   color: #333333;
+//   margin-bottom: 0.59rem;
+//   display: flex;
+//   justify-content: space-between;
+// }
+
