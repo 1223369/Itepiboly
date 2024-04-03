@@ -1,7 +1,8 @@
 import { createApp } from 'vue'
-import './assets/css/style.scss'
 // 2. 引入组件样式
 import 'vant/lib/index.css';
+import './assets/css/style.scss'
+
 import App from './App.vue'
 import store from './store'
 import router from './router'

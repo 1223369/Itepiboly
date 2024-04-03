@@ -21,7 +21,7 @@ export function login(data: any) {
 //协议文件接口
 export function getPolicy(data: any) {
   return request({
-    url: 'policy_protocol_list', 
+    url: 'policy_protocol/list', 
     method: 'GET',
     params: data
   });

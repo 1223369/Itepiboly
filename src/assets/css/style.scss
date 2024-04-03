@@ -2,15 +2,13 @@ body,div,h3,h4,h5,input,textarea,select,p,dl,dt,dd,a,i,strong,img,button,form,ta
   margin:0;
   padding:0;
 }
-input {
+input{
   resize: none;
   border: none;
 }
-
 img{
   border: none;
 }
-
 a{
   text-decoration: none;
   color: #fe9527;
@@ -22,73 +20,151 @@ body {
   font-size: 0.64rem;
   font-family: 'Microsoft YaHei';
 }
-
-textarea {
+textarea{
   line-height: 1.2rem !important;
 }
-
-// .van-nav-bar .van-icon{
-//   color: #333333;
-// }
-
-// .van-button--primary{
-//   background: linear-gradient(90deg, #FEA829, #FE8F27);
-//   border-radius: 1.17rem;
-//   border: none;
-//   font-size: 0.96rem;
-// }
-
-// .van-checkbox__icon{
-//   height: 0.75rem;
-//   font-size: 0.8rem;
-// }
-
-// .van-checkbox__icon .van-icon{
-//   width: 0.75rem;
-//   height: 0.75rem;
-//   line-height: 0.75rem;
-// }
-// .van-loading{
-//   text-align: center;
-//   margin-top: 1rem;
-// }
-
-// .wy-no-data{
-//   width: 8.96rem;
-//   height: 5.73rem;
-//   background: url('@/assets/img/icon/icon-no-data.png') no-repeat;
-//   background-size: 100%;
-//   padding-top: 7.5rem;
-//   text-align: center;
-//   font-size: 0.75rem;
-//   font-weight: 400;
-//   color: #666666;
-//   margin: 6rem auto 0;
-// }
-
-// .resume-label{
-//   padding: 1.28rem 0 1.09rem;
-//   margin: 0 0.56rem;
-//   border-bottom: 1px solid #F3F3F3;
-// }
-
-// .resume-label h3{
-//   font-size: 0.96rem;
-//   line-height: 0.96rem;
-//   font-weight: 400;
-//   color: #333333;
-//   display: flex;
-//   justify-content: space-between;
-//   margin-bottom: 0.77rem;
-// }
-
-// .resume-label h4{
-//   line-height: 0.8rem;
-//   font-size: 0.8rem;
-//   font-weight: 400;
-//   color: #333333;
-//   margin-bottom: 0.59rem;
-//   display: flex;
-//   justify-content: space-between;
-// }
-
+.van-nav-bar .van-icon{
+  color: #333333;
+}
+.van-button--primary{
+  background: linear-gradient(90deg, #FEA829, #FE8F27);
+  border-radius: 1.17rem;
+  border: none;
+  font-size: 0.96rem;
+}
+.van-checkbox__icon{
+  height: 0.75rem;
+  font-size: 0.8rem;
+}
+.van-checkbox__icon .van-icon{
+  width: 0.75rem;
+  height: 0.75rem;
+  line-height: 0.75rem;
+}
+.van-checkbox__icon--checked .van-icon{
+  background-color: #FE9527;
+  border-color: #FE9527;
+}
+.van-loading{
+  text-align: center;
+  margin-top: 1rem;
+}
+.wy-no-data{
+  width: 8.96rem;
+  height: 5.73rem;
+  background: url('@/assets/img/icon/icon-no-data.png') no-repeat;
+  background-size: 100%;
+  padding-top: 7.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #666666;
+  margin: 6rem auto 0;
+}
+.resume-label{
+  padding: 1.28rem 0 1.09rem;
+  margin: 0 0.56rem;
+  border-bottom: 1px solid #F3F3F3;
+}
+.resume-label h3{
+  font-size: 0.96rem;
+  line-height: 0.96rem;
+  font-weight: 400;
+  color: #333333;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.77rem;
+}
+.resume-label h4{
+  line-height: 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #333333;
+  margin-bottom: 0.59rem;
+  display: flex;
+  justify-content: space-between;
+}
+.resume-label h5{
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+  font-weight: 300;
+  color: #333333;
+  margin-bottom: 0.93rem;
+}
+.resume-label p{
+  font-size: 0.64rem;
+  line-height: 0.64rem;
+  font-weight: 300;
+  color: #666666;
+  margin-bottom: 0.69rem;
+}
+.resume-label textarea{
+  font-size: 0.75rem;
+  font-weight: 100;
+  color: #666666;
+  line-height: 1.39rem;
+  margin-top: 0;
+}
+.resume-label .van-swipe-cell{
+  border-bottom: 1px solid #f3f3f3;
+  margin-bottom: 1.5rem;
+}
+.resume-label .van-swipe-cell:last-child{
+  border: none;
+  margin-bottom: 0;
+}
+.resume-label .van-swipe-cell__right{
+  display: flex;
+  align-items: center;
+}
+.resume-label .van-cell{
+  padding-top: 0;
+}
+.resume-label .van-cell:after{
+  border: none;
+}
+.resume-label .delete{
+  width: 1.87rem;
+  height: 1.87rem;
+  margin-left: 0.2rem;
+}
+.resume-label label{
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+  font-weight: 100;
+  color: #999999;
+}
+.resume-label .van-cell{
+  padding: 0.8rem 0 0.6rem;
+  font-size: 0.8rem;
+  line-height: 0.8rem;
+  font-weight: 100;
+  color: #999999;
+}
+.user-item{
+  margin-bottom: 1.47rem;
+  border-bottom: 1px solid #f3f3f3;
+}
+.user-item .van-cell{
+  padding-left: 0;
+}
+.user-item h5{
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+  font-weight: 300;
+  color: #666666;
+}
+.wy-submit{
+  height: 2.35rem;
+  background: linear-gradient(90deg, #FEA829, #FE8F27);
+  border-radius: 0.27rem;
+  margin: 0 0.64rem 0.64rem;
+  position: fixed;
+  bottom: 0;
+  left:0;
+  width: calc(100vw - 1.28rem);
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #FFFFFF;
+}
