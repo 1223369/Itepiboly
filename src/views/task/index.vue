@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, provide } from "vue";
+import { taskStore } from "@/store/task"
 import FooterTabbar from "@/components/FooterTabbar.vue";
 import TaskList from "@/components/list/TaskList.vue";
 import Banner from "./components/Banner.vue";
@@ -7,9 +8,27 @@ import CitySwitch from "./components/CitySwitch.vue";
 import PositionType from "./components/PositionType.vue";
 import Screen from "./components/Screen.vue";
 
+
+const store = taskStore();
 const state = reactive({
   // 切换城市弹窗
-  citySwitchBool: true,
+  citySwitchBool: false,
+  PositionTypeBool: true,
+})
+
+// 关闭选择城市弹窗
+const closeCitySwitch = (name) => {
+  if (name) {
+    store.setCityValue(name);
+  }
+
+  state.citySwitchBool = false;
+}
+
+
+// 向子组件传递方法
+provide('popup', {
+  closeCitySwitch,
 })
 
 
@@ -20,9 +39,9 @@ const taskList = reactive([{ id: 1 }, { id: 2 }]);
   <div class="task-page">
     <!-- 头部搜索框城市等 -->
     <div class="task-top">
-      <div class="task-top-city">
+      <div class="task-top-city" @click="state.citySwitchBool = true">
         <i></i>
-        <strong>北京</strong>
+        <strong>{{ store.cityValue }}</strong>
         <span></span>
       </div>
       <!-- 输入框 -->
@@ -48,10 +67,20 @@ const taskList = reactive([{ id: 1 }, { id: 2 }]);
     <van-popup
       v-model:show="state.citySwitchBool"
       position="left"
-      duration="0"
+      duration="0.3"
       :style="{ width: '100%', height: '100%' }"
     >
     <CitySwitch></CitySwitch>
+  </van-popup>
+
+  <!-- 职位类型弹窗 -->
+  <van-popup
+      v-model:show="state.PositionTypeBool"
+      position="left"
+      duration="0.3"
+      :style="{ width: '100%', height: '100%' }"
+    >
+    <PositionType></PositionType>
   </van-popup>
   </div>
 

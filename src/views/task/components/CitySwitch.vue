@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { inject } from "vue";
 import { cityList } from "@/api/task";
 import { taskStore } from "@/store/task";
 import { showToast } from "vant";
 
 const store = taskStore();
-
+// 获取父组件传递的方法
+const { closeCitySwitch } = inject('popup')
 
 const getCityList = async () => {
         const res = await cityList()
@@ -16,19 +18,19 @@ const getCityList = async () => {
     }
   if(store.cityList.length <= 0) getCityList();
 
-const onClickLeft = () => history.back();
+const leftBack = () => closeCitySwitch();
 </script>
 
 <template>
-  <van-nav-bar title="城市切换" left-arrow @click-left="onClickLeft" />
+  <van-nav-bar title="城市切换" left-arrow @click-left="leftBack" />
   <div class="city-switch">
     <h3>当前城市</h3>
     <div class="city-switch-text">
-      <span>北京</span>
+      <span @click="leftBack(store.cityValue)">{{ store.cityValue }}</span>
     </div>
     <h3>其他城市</h3>
     <div class="city-switch-text">
-      <span v-for="(item, index) in store.cityList" :key="index" >{{ item.name }}</span>
+      <span v-for="(item, index) in store.cityList" :key="index" @click="closeCitySwitch(item.name)">{{ item.name }}</span>
     </div>
   </div>
 </template>
