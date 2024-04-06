@@ -40,7 +40,7 @@ const clearScreen = () => {
   state.cycle = '';
 }
 
-const leftBack = () => closeScreen();
+const leftBack = () => closeScreen(); 
 </script>
 
 <template>
