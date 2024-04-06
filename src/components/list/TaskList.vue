@@ -20,35 +20,35 @@ const gotoDetail = (id: number) => {
   <div class="task-item" v-for="(item, index) in taskList" :key="index" @click="gotoDetail((item as any).id)">
     <!-- 任务标题及任务紧急程度 -->
     <div class="task-item-top">
-      <h3>移动端小程序开发</h3>
-      <span>紧急</span>
+      <h3>{{ item.task_name }}</h3>
+      <span v-if="item.is_emergency == 1">紧急</span>
     </div>
 
     <!-- 任务描述 -->
     <dl>
       <dt>
         <h5>任务预算</h5>
-        <strong>￥100</strong>
+        <strong>￥{{item.task_budget}}</strong>
       </dt>
       <dt>
         <h5>任务周期</h5>
-        <strong>20天</strong>
+        <strong>{{item.task_budget}}天</strong>
       </dt>
       <dt>
         <h5>服务方式</h5>
-        <strong>驻场</strong>
+        <strong>{{item.service_mode}}</strong>
       </dt>
     </dl>
 
     <!-- 任务要求 -->
-    <p>尽快到达现场，完成移动端小程序开发，并提交相关文档。尽快到达现场，完成移动端小程序开发，并提交相关文档。尽快到达现场，完成移动端小程序开发，并提交相关文档。</p>
+    <p>任务要求：{{item.task_ask}}</p>
 
     <!-- 任务发起公司和地址 -->
     <div class="task-item-buttom">
-      <label for="">北京爱心慈善基金会</label>
+      <label for="">{{item.company_name}}</label>
       <span>
         <van-icon name="location-o" />
-        北京
+        {{item.city}}
       </span>
     </div>
   </div>
@@ -58,7 +58,7 @@ const gotoDetail = (id: number) => {
 .task-item {
   background: #ffffff;
   border-radius: 0.53rem;
-  margin: 0 0.64rem 0.53rem;
+  margin: 0 0 0.53rem;
   padding: 0.88rem 0.48rem 0.75rem;
   position: relative;
   font-size: 0.69rem;
@@ -92,7 +92,7 @@ const gotoDetail = (id: number) => {
 
   dl {
     display: flex;
-    margin-bottom: 0.96rem;
+    margin-bottom: 0.8rem;
 
     dt {
       margin-right: 1.44rem;
@@ -107,6 +107,8 @@ const gotoDetail = (id: number) => {
 
       strong {
         font-size: 0.64rem;
+        line-height: 0.64rem;
+        display: block;
         font-weight: 500;
         color: #333333;
       }

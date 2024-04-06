@@ -41,6 +41,7 @@ app.use(CheckboxGroup)
 app.use(Switch)
 app.use(RadioGroup)
 app.use(Radio)
+app.use(ActionSheet)
 
 //挂载实例
 app.mount('#app')

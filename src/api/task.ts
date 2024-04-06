@@ -34,3 +34,12 @@ export function screenList() {
     method: 'GET'
   });
 }
+
+// 获取任务列表数据
+export function TaskAllList(data: any) {
+  return request({
+    url: '/task/TaskAllList', 
+    method: 'GET',
+    params: data
+  });
+}
