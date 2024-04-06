@@ -37,7 +37,7 @@ const cycleChange = (name: string) => {
 // 清除筛选
 const clearScreen = () => {
   state.mode = '';
-  state.cycle = '';
+  state.cycle = ''; 
 }
 
 const leftBack = () => closeScreen(); 
