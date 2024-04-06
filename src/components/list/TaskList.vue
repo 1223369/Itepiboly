@@ -17,7 +17,7 @@ const gotoDetail = (id: number) => {
 </script>
 
 <template>
-  <div class="task-item" v-for="(item, index) in taskList" :key="index" @click="gotoDetail((item as any).id)">
+  <div class="task-item" v-for="(item, index) in taskList" :key="index" @click="gotoDetail((item as any).task_id)">
     <!-- 任务标题及任务紧急程度 -->
     <div class="task-item-top">
       <h3>{{ item.task_name }}</h3>
