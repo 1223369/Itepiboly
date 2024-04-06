@@ -10,13 +10,15 @@ export const taskStore = defineStore({
             bannerList: [],
             // 职位类型
             positionList: [],
+            // 筛选数据
+            screenList: [],
         }
     },
     actions: {
         setCityValue(value: string){
             this.cityValue = value
         },
-        setCityList(data: any){
+        setCityList(data:any){
             this.cityList = data
         },
         setBannerList(data: any){
@@ -24,6 +26,9 @@ export const taskStore = defineStore({
         },
         setPositionList(data: any){
             this.positionList = data
+        },
+        setScreenList(data: any){
+            this.screenList = data
         }
     }
 })

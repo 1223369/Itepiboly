@@ -9,8 +9,6 @@ export function positionTypeList(data: any) {
   })
 }
 
-
-
 //获取城市列表
 export function cityList(data: any) {
   return request({
@@ -26,5 +24,13 @@ export function bannerList(data: any) {
     url: '/home/banner/list', 
     method: 'GET',
     params: data
+  });
+}
+
+//获取筛选列表数据
+export function screenList() {
+  return request({
+    url: '/task/getTaskAll', 
+    method: 'GET'
   });
 }

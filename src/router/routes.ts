@@ -111,7 +111,11 @@ export const constantRoute: Array<RouteRecordRaw> = [
     },
     {
         path: '/talent',
-        component: () => import('@/views/talent/index.vue')
+        component: () => import('@/views/talent/index.vue'),
+        meta: {
+            requireAuth: true, // 需要用户权限
+            roles: ['2'] // 访问该路由需要的权限
+        }
     },
     {
         path: '/talent/details/:id',

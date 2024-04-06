@@ -6,12 +6,17 @@ import { showToast } from "vant";
 
 const store = taskStore();
 // 获取父组件传递的方法
-const { closeCitySwitch } = inject('popup')
+const { closePositionType } = inject('popup')
 
 const state = reactive({
     // 职位类型默认值
     typeKey: 0
 });
+
+// 切换职位类型
+const setTypeKey = (key: number) => {
+    state.typeKey = key
+}
 
 const getPositionList = async () => {
         const res = await positionTypeList()
@@ -23,7 +28,7 @@ const getPositionList = async () => {
     }
   if(store.positionList.length <= 0) getPositionList();
 
-const leftBack = () => closeCitySwitch();
+const leftBack = () => closePositionType();
 </script>
 
 <template>
@@ -31,12 +36,12 @@ const leftBack = () => closeCitySwitch();
   <!-- 职位类型 -->
   <div class="position-type">
     <div class="position-type-left">
-      <h5  v-for="(item, index) in store.positionList" :key="index" @click="closeCitySwitch(item.name)">{{ item.name }}</h5>
+      <h5 :class="{active: state.typeKey === index}" v-for="(item, index) in store.positionList" :key="index" @click="setTypeKey(index)">{{ item.name }}</h5>
     </div>
 
     <!-- 职位类型右侧 -->
     <div class="position-type-right">
-      <span v-for="(item, index) in store.positionList[state.typeKey]?.children" :key="index" @click="closeCitySwitch(item.name)">{{ item.name }}</span>
+      <span v-for="(item, index) in store.positionList[state.typeKey]?.children" :key="index" @click="closePositionType(item.name)">{{ item.name }}</span>
     </div>
   </div>
 </template>

@@ -19,6 +19,7 @@ let router = createRouter({
 // 路由守卫
 router.beforeEach((to, from, next) => {
 
+
   const store = userStore()
     if(store.token){
       next()
@@ -30,9 +31,19 @@ router.beforeEach((to, from, next) => {
       }
   }
 
+  // 判断该路由是否需要登录权限
+  if(to.meta.requireAuth) {
+    // 判断当前用户是否有访问该路由的权限
+    if (to.meta.roles.includes(store.role)) {
+      next() // 用户有访问权限，直接进入页面
+    }else{
+      next('/login')
+    }
+  }
 
 
-  let role = userStore().role
+
+  // let role = userStore().role
   // TODO: 验证Token是否存在，存在则进入页面
   // if(role === 1) {
   //   next('/task')

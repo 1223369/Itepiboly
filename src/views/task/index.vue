@@ -11,26 +11,55 @@ import Screen from "./components/Screen.vue";
 
 const store = taskStore();
 const state = reactive({
-  // 切换城市弹窗
+  // 切换弹窗
   citySwitchBool: false,
-  PositionTypeBool: true,
-})
+  PositionTypeBool: false,
+  screenBool: false,
+  // 当前职位类型
+  positionType: '',
+  // 服务模式
+  serviceMode: '',
+  // 服务周期
+  serviceCycle: '',
+});
 
 // 关闭选择城市弹窗
-const closeCitySwitch = (name) => {
+const closeCitySwitch = (name: string) => {
+  console.log('name', name)
   if (name) {
     store.setCityValue(name);
   }
 
   state.citySwitchBool = false;
 }
+// 关闭职位选择弹窗
+const closePositionType = (name: string) => {
+  console.log('name', name)
+  if (name) {
+    state.positionType = name;
+  }
+
+  state.PositionTypeBool = false;
+}
+// 关闭筛选弹窗
+const closeScreen = (obj: string) => {
+  console.log('obj', obj)
+  if (obj) {
+    state.serviceMode = obj.mode;
+    state.serviceCycle = obj.cycle;
+  }
+
+  state.screenBool = false;
+}
+
 
 
 // 向子组件传递方法
 provide('popup', {
   closeCitySwitch,
+  closePositionType,
+  closeScreen,
 })
-
 
 const taskList = reactive([{ id: 1 }, { id: 2 }]);
 </script>
@@ -57,8 +86,8 @@ const taskList = reactive([{ id: 1 }, { id: 2 }]);
 
     <div class="task-title">
       <h3>最新任务</h3>
-      <div class="task-position-pop">职位类型<span></span></div>
-      <div class="task-screen-pop">筛选<span></span></div>
+      <div class="task-position-pop" @click="state.PositionTypeBool = true">{{ state.positionType || '职位类型'}}<span></span></div>
+      <div class="task-screen-pop" @click="state.screenBool = true">筛选<span></span></div>
     </div>
 
     <TaskList :taskList="taskList"></TaskList>
@@ -81,6 +110,16 @@ const taskList = reactive([{ id: 1 }, { id: 2 }]);
       :style="{ width: '100%', height: '100%' }"
     >
     <PositionType></PositionType>
+  </van-popup>
+
+  <!-- 职位类型弹窗 -->
+  <van-popup
+      v-model:show="state.screenBool"
+      position="left"
+      duration="0.3"
+      :style="{ width: '100%', height: '100%' }"
+    >
+    <Screen></Screen>
   </van-popup>
   </div>
 
