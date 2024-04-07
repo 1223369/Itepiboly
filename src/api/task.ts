@@ -36,10 +36,28 @@ export function screenList() {
 }
 
 // 获取任务列表数据
-export function TaskAllList(data: any) {
+export function taskAllList(data: any) {
   return request({
     url: '/task/TaskAllList', 
     method: 'GET',
     params: data
   });
+}
+
+// 获取任务详请数据
+export function taskDetail(data: any) {
+  return request({
+    url: '/task/getTaskDetails', 
+    method: 'GET',
+    params: data
+  });
+}
+
+// 收藏任务接口
+export function taskCollection(data: any) {
+  return request({
+      url: '/course/TaskCollection',
+      method: 'POST',
+      data
+  })
 }

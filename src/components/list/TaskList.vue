@@ -12,7 +12,7 @@ const props = defineProps({
 
 //跳转对应页面
 const gotoDetail = (id: number) => {
-  router.push('/task/details'+id);
+  router.push('/task/detail/'+id);
 };
 </script>
 

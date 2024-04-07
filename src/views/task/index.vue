@@ -7,7 +7,7 @@ import Banner from "./components/Banner.vue";
 import CitySwitch from "./components/CitySwitch.vue";
 import PositionType from "./components/PositionType.vue";
 import Screen from "./components/Screen.vue";
-import { TaskAllList } from "@/api/task";
+import { taskAllList } from "@/api/task";
 
 const store = taskStore();
 const state = reactive({
@@ -71,7 +71,7 @@ const getTaskAllList = async () => {
 
   if (state.pageNum === 1) state.taskList = [];
 
-  const res = await TaskAllList({
+  const res = await taskAllList({
     position_name: state.positionValue,
     service_mode: state.serviceMode,
     task_cycle: state.taskCycle,

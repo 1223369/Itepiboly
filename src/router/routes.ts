@@ -18,6 +18,10 @@ export const constantRoute: Array<RouteRecordRaw> = [
         component: () => import('@/views/task/index.vue')
     },
     {
+        path: '/task/detail/:id',
+        component: () => import('@/views/task/detail.vue')
+    },
+    {
         path: '/task/search',
         component: () => import('@/views/task/search.vue')
     },
@@ -50,7 +54,7 @@ export const constantRoute: Array<RouteRecordRaw> = [
         component: () => import('@/views/message/systemDetails.vue')
     },
     {
-        path: '/message/talk/:taskId/:userId',
+        path: '/message/talk/:id',
         component: () => import('@/views/message/talk.vue')
     },
     {
