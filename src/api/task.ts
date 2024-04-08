@@ -61,3 +61,12 @@ export function taskCollection(data: any) {
       data
   })
 }
+
+// 热门搜索接口
+export function hotSearch(data: any) {
+  return request({
+      url: '/position/public/getHotSeach',
+      method: 'get',
+      data
+  })
+}

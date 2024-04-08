@@ -12,6 +12,8 @@ export const taskStore = defineStore({
             positionList: [],
             // 筛选数据
             screenList: [],
+            // 热门搜索
+            hotSearchList: []
         }
     },
     actions: {
@@ -29,6 +31,9 @@ export const taskStore = defineStore({
         },
         setScreenList(data: any){
             this.screenList = data
+        },
+        setHotSearchList(data: any){
+            this.hotSearchList = data
         }
     }
 })

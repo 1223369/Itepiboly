@@ -8,7 +8,9 @@ import CitySwitch from "./components/CitySwitch.vue";
 import PositionType from "./components/PositionType.vue";
 import Screen from "./components/Screen.vue";
 import { taskAllList } from "@/api/task";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const store = taskStore();
 const state = reactive({
   // 切换弹窗
@@ -106,6 +108,11 @@ const onRefresh = () => {
   getTaskAllList()
 }
 
+// 跳转搜索页面
+const gotoSearch = () => {
+  router.push('/task/search');
+};
+
 // 向子组件传递方法
 provide("popup", {
   closeCitySwitch,
@@ -127,7 +134,7 @@ getTaskAllList();
         <span></span>
       </div>
       <!-- 输入框 -->
-      <input type="text" readonly placeholder="请输入想要搜索的内容" />
+      <input type="text" readonly placeholder="请输入想要搜索的内容" @click="gotoSearch"/>
       <route-link
         to="/message/systemList"
         class="task-icon-message"
