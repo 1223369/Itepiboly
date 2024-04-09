@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 
-  import { getPolicy } from '@/api/user';
+import { getPolicy } from '@/api/user';
 import { showToast } from 'vant';
 import { reactive } from 'vue'
 
@@ -24,7 +24,7 @@ import { reactive } from 'vue'
 
   // TODO:获取html文本
   const getPolicyChange = async () => {
-    
+
     const res = await getPolicy({
       id: 16
     })

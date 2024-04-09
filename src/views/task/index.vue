@@ -8,7 +8,10 @@ import CitySwitch from "./components/CitySwitch.vue";
 import PositionType from "./components/PositionType.vue";
 import Screen from "./components/Screen.vue";
 import { taskAllList } from "@/api/task";
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
+import { nextTick } from "process";
+import { onActivated } from "vue";
+
 
 const router = useRouter();
 const store = taskStore();
@@ -37,6 +40,28 @@ const state = reactive({
   finished: false,
   // 任务列表是否正在加载
   loading: false,
+  // 定时器
+  timer: null,
+});
+
+// 保持页面状态
+onActivated(() => {
+   // 保持上次浏览位置
+  nextTick(() => {
+    // 页面刷新后恢复滚动条位置
+      window.scrollTo({
+        top: store.taskScroll,
+        behavior: "smooth",
+      });
+  });
+});
+
+//记录滚动位置
+onBeforeRouteLeave((to, from, next) => {
+  let taskScroll =
+    document.documentElement.scrollTop || document.body.scrollTop;
+  store.setTaskScroll(taskScroll);
+  next();
 });
 
 // 关闭选择城市弹窗
@@ -46,7 +71,6 @@ const closeCitySwitch = (name: string) => {
     onRefresh();
   }
   state.citySwitchBool = false;
-
 };
 // 关闭职位选择弹窗
 const closePositionType = (name: string) => {
@@ -104,13 +128,13 @@ const onLoad = () => {
 
 // 下拉刷新
 const onRefresh = () => {
-  state.pageNum = 1
-  getTaskAllList()
-}
+  state.pageNum = 1;
+  getTaskAllList();
+};
 
 // 跳转搜索页面
 const gotoSearch = () => {
-  router.push('/task/search');
+  router.push("/task/search");
 };
 
 // 向子组件传递方法
@@ -134,7 +158,12 @@ getTaskAllList();
         <span></span>
       </div>
       <!-- 输入框 -->
-      <input type="text" readonly placeholder="请输入想要搜索的内容" @click="gotoSearch"/>
+      <input
+        type="text"
+        readonly
+        placeholder="请输入想要搜索的内容"
+        @click="gotoSearch"
+      />
       <route-link
         to="/message/systemList"
         class="task-icon-message"
@@ -155,6 +184,7 @@ getTaskAllList();
 
     <!-- 任务列表 -->
     <van-pull-refresh
+      class="task-list"
       v-model="state.loading"
       success-text="刷新成功"
       @refresh="onRefresh"
@@ -168,11 +198,14 @@ getTaskAllList();
         <TaskList :taskList="state.taskList"></TaskList>
 
         <!-- 暂无数据显示 -->
-        <div class="wy-no-data" v-if="!state.loading && state.taskList.length === 0">暂无数据</div>
-
+        <div
+          class="wy-no-data"
+          v-if="!state.loading && state.taskList.length === 0"
+        >
+          暂无数据
+        </div>
       </van-list>
     </van-pull-refresh>
-
     <!-- 切换城市左侧弹窗 -->
     <van-popup
       v-model:show="state.citySwitchBool"

@@ -4,6 +4,9 @@ import { showToast } from "vant";
 import TaskList from "@/components/list/TaskList.vue";
 import { hotSearch, taskAllList } from "@/api/task";
 import { taskStore } from "@/store/task";
+import { onBeforeRouteLeave } from "vue-router";
+import { onActivated } from "vue";
+import { nextTick } from "process";
 
 const store = taskStore();
 const his = localStorage.getItem("searchHistory");
@@ -107,6 +110,26 @@ const onRefresh = () => {
   state.pageNum = 1;
   getTaskAllList();
 };
+
+// 保持页面状态
+onActivated(() => {
+   // 保持上次浏览位置
+  nextTick(() => {
+    // 页面刷新后恢复滚动条位置
+      window.scrollTo({
+        top: store.searchScroll,
+        behavior: "smooth",
+      });
+  });
+});
+
+//记录滚动位置
+onBeforeRouteLeave((to, from, next) => {
+  let searchScroll =
+    document.documentElement.scrollTop || document.body.scrollTop;
+  store.setSearchScrolll(searchScroll);
+  next();
+});
 
 const leftBack = () => history?.back();
 

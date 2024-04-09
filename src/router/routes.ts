@@ -14,16 +14,24 @@ export const constantRoute: Array<RouteRecordRaw> = [
         component: () => import('@/views/login/privacyPolicy.vue')
     },
     {
+        name: 'task',
         path: '/task',
-        component: () => import('@/views/task/index.vue')
+        component: () => import('@/views/task/index.vue'),
+        meta: {
+            keepAlive: true //设置页面是否需要使用缓存
+        }
     },
     {
         path: '/task/detail/:id',
         component: () => import('@/views/task/detail.vue')
     },
     {
+        name: 'search',
         path: '/task/search',
-        component: () => import('@/views/task/search.vue')
+        component: () => import('@/views/task/search.vue'),
+        meta: {
+            keepAlive: true //设置页面是否需要使用缓存
+        }
     },
     {
         path: '/task/companySource/:id',

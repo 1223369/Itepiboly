@@ -12,6 +12,7 @@ const props = defineProps({
 
 //跳转对应页面
 const gotoDetail = (id: number) => {
+  
   router.push("/talent/details" + id);
 };
 </script>

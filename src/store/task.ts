@@ -13,7 +13,11 @@ export const taskStore = defineStore({
             // 筛选数据
             screenList: [],
             // 热门搜索
-            hotSearchList: []
+            hotSearchList: [],
+            // 任务列表滚动位置
+            taskScroll: 0,
+            // 搜索列表滚动位置
+            searchScroll: 0,
         }
     },
     actions: {
@@ -34,6 +38,12 @@ export const taskStore = defineStore({
         },
         setHotSearchList(data: any){
             this.hotSearchList = data
-        }
+        },
+        setTaskScroll(data: any){
+            this.taskScroll = data
+        },
+        setSearchScrolll(data: any){
+            this.searchScroll = data
+        },
     }
 })
