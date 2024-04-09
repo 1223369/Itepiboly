@@ -13,9 +13,6 @@ import { Button,NavBar,Tabbar,TabbarItem,Checkbox,Toast,Icon,Popup,Swipe, SwipeI
 
 //创建vue实例
 const app = createApp(App)
-// 记录task首页滚动位置
-// app.config.globalProperties.$http = () => {}
-// app.config.globalProperties.$taskScroll = 0;
 //挂载pinia
 app.use(store)
 //挂载路由

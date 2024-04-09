@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
+import ProgressBar from "@/components/ProgressBar.vue";
 
 const router = useRouter();
 
@@ -19,40 +20,37 @@ const gotoDetail = (id: number) => {
 
 <template>
   <dl v-for="(item, index) in contractList" :key="index" @click="gotoDetail((item as any).id)">
-    <!-- 合约头部 -->
+    <!-- 合约头部 --> 
     <dd>
-      <h3>移动端小程序开发工程师</h3>
-      <span>履约中</span>
+      <h3>{{ item.contract_name }}</h3>
+      <span>{{ item.is_contract_type_text }}</span>
       <van-icon name="arrow" />
     </dd>
 
     <!-- 合约内容 -->
     <dt>
       <label for="">公司名称</label>
-      <span>北京主场互联网科技有限公司</span>
+      <span>{{ item.company_name }}</span>
     </dt>
     <dt>
       <label for="">合约类型</label>
-      <span>技术服务</span>
+      <span>{{ item.contract_type }}</span>
     </dt>
     <dt>
       <label for="">合约周期</label>
-      <span></span>
+      <span>{{ item.start_cycle_time }}-{{ item.end_cycle_time }}</span>
     </dt>
     <dt>
       <label for="">签约时间</label>
-      <span></span>
+      <span>{{ item.signing_time }}</span>
     </dt>
     <dt>
       <label for="">合约进度</label>
       <span></span>
     </dt>
     <!-- 进度条 -->
-    <dt class="contract-progress">
-      <i ></i>
-      <i class="green"></i>
-      <i class="orange"></i>
-      <i class="red"></i>
+    <dt>
+     <ProgressBar :item="item"/>
     </dt>
   </dl>
 </template>
@@ -102,26 +100,5 @@ dl {
     margin-bottom: 0;
   }
 
-  .contract-progress {
-    display: flex;
-    height: 0.53rem;
-    width: 100%;
-
-    i{
-      flex: 1;
-      background: #f3f3f3;
-      margin: 0 1px;
-    }
-
-    i.green {
-      background: #50D400;
-    }
-    i.orange {
-      background: #FE9215;
-    }
-    i.red {
-      background: #FF4800;
-    }
-  }
 }
 </style>

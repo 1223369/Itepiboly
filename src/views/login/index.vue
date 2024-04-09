@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import{ ref,reactive } from 'vue'
-  import { useRoute, useRouter } from 'vue-router';
-  import { getCode } from '@/api/constract';
+  import{ reactive } from 'vue'
+  import { useRouter } from 'vue-router';
+  import { getCode } from '@/api/user';
   import { showToast } from 'vant';
 import { login } from '@/api/user';
 import { userStore } from '@/store/user';
@@ -50,6 +50,10 @@ const router = useRouter();
 
   //登录
   const loginSubmit = async() => {
+    if (!state.accounts) {
+      showToast('请输入手机号');
+      return;
+    }
     if (!state.code) {
       showToast('请输入验证码');
       return;
