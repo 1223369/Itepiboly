@@ -14,12 +14,12 @@ const props = defineProps({
 
 //跳转对应页面
 const gotoDetail = (id: number) => {
-  router.push("/contract/details" + id);
+  router.push("/contract/details/" + id);
 };
 </script>
 
 <template>
-  <dl v-for="(item, index) in contractList" :key="index" @click="gotoDetail((item as any).id)">
+  <dl v-for="(item, index) in contractList" :key="index" @click="gotoDetail((item as any).contract_id)">
     <!-- 合约头部 --> 
     <dd>
       <h3>{{ item.contract_name }}</h3>

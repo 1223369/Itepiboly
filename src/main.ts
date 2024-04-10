@@ -6,13 +6,15 @@ import './assets/css/style.scss'
 import App from './App.vue'
 import store from './store'
 import router from './router'
-import './utils/rem'
+import { directive } from './utils/common'
 import { Button,NavBar,Tabbar,TabbarItem,Checkbox,Toast,Icon,Popup,Swipe, SwipeItem,List,PullRefresh,ActionBarIcon,Search,
   Loading,Field,SwipeCell,Uploader,Form,ActionSheet,Picker,CheckboxGroup,Dialog,Switch,RadioGroup, Radio } from 'vant'
 
 
 //创建vue实例
 const app = createApp(App)
+// 注册全局指令
+directive(app)
 //挂载pinia
 app.use(store)
 //挂载路由
