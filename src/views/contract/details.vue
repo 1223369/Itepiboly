@@ -4,6 +4,9 @@ import { contractDetail,contractOperation } from "@/api/constract";
 import { useRouter } from "vue-router";
 import { showToast } from "vant";
 import ProgressBar from "@/components/ProgressBar.vue";
+
+
+
 const router = useRouter();
 // 将路由携带的任务id赋值
 const contractId = router.currentRoute.value.params.id;
@@ -52,6 +55,8 @@ const confirmChange = () => {
 const gotoProgress = () => {
   router.push("/contract/progress/" + state.item.contract_id);
 };
+
+
 
 const leftBack = () => history.back();
 

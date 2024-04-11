@@ -38,14 +38,20 @@ export const constantRoute: Array<RouteRecordRaw> = [
         component: () => import('@/views/task/companySource.vue')
     },
     {
+        name: 'contract',
         path: '/contract',
-        component: () => import('@/views/contract/index.vue')
+        component: () => import('@/views/contract/index.vue'),
+        meta: {
+            keepAlive: true //设置页面是否需要使用缓存
+        }
     },
     {
+        name: 'contractDetails',
         path: '/contract/details/:id',
         component: () => import('@/views/contract/details.vue')
     },
     {
+
         path: '/contract/progress/:id',
         component: () => import('@/views/contract/progress.vue')
     },

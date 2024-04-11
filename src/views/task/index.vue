@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, provide } from "vue";
+import { reactive, provide,onActivated } from "vue";
 import { taskStore } from "@/store/task";
 import FooterTabbar from "@/components/FooterTabbar.vue";
 import TaskList from "@/components/list/TaskList.vue";
@@ -10,7 +10,6 @@ import Screen from "./components/Screen.vue";
 import { taskAllList } from "@/api/task";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import { nextTick } from "process";
-import { onActivated } from "vue";
 
 
 const router = useRouter();
@@ -281,7 +280,7 @@ getTaskAllList();
       height: 1.71rem;
       background: #ffffff url("@/assets/img/icon/icon-search.png") 0.35rem
         0.3rem no-repeat;
-      background-size: 9%;
+      background-size: 6%;
       border: 0.03px solid #ededed;
       border-radius: 0.85rem;
       font-size: 0.69rem;
