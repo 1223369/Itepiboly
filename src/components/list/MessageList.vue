@@ -9,28 +9,37 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  type: {
+    type: String,
+  }
 });
 
 //跳转对应页面
-const gotoDetail = (id: number) => {
-  router.push("/message/talk" + id);
+const gotoDetail = (item: any) => {
+  if (props.type === "system") {
+    router.push("/message/systemList");
+  } else if (props.type === "talk") {
+    router.push("/message/talk/"+item.things_id +'/'+item.send_id);
+  }
+  
 };
 </script>
 
 <template>
-  <dl v-for="(item, index) in messageList" :key="index" @click="gotoDetail((item as any).id)">
+  <dl v-for="(item, index) in messageList" :key="index" @click="gotoDetail((item as any))">
     <!-- 头像姓名 -->
     <dd>
-      <img src="@/assets/img/icon/icon-message.png" alt="公司" /></img>
-      <span></span>
+      <img v-if="item.receive_is_read" :src="item.receive_is_read">
+      <img v-else src="@/assets/img/icon/icon-message.png">
+      <span v-if="item.is_show"></span>
     </dd>
 
     <!-- 消息内容 -->
     <dt>
-      <h3>广州爱沦科技有限公司
-        <span>6分钟前</span>
+      <h3>{{ item.title }}
+        <span>{{ item.create_time }}</span>
       </h3>
-      <p>现在过来快快快老板陈烜等着你</p>
+      <p>{{ item.content }}</p>
     </dt>
   </dl>
 </template>

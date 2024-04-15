@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import {reactive} from "vue";
 import FooterTabbar from "@/components/FooterTabbar.vue";
 import MessageList from "@/components/list/MessageList.vue";
+import { messageStore } from "@/store/message";
 
-const messageList = reactive([
-  {id :1},
-  {id:2}
-]);
+const store = messageStore();
+store.getSystemMessageList();
+store.getChatMessageList();
 
 </script>
 
 <template>
-  <MessageList :messageList="messageList"></MessageList>
+  <MessageList :messageList="store.systemMessageList" type="system"></MessageList>
+  <MessageList :messageList="store.chatMessageList" type="talk"></MessageList>
   <FooterTabbar></FooterTabbar>
 </template>
 
 
 
-<style scoped lang="less">
+<style scoped lang="scss">
 
 </style>
