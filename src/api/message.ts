@@ -25,3 +25,12 @@ export function chatMessageList() {
       method: 'GET'
   })
 }
+
+// 对话消息聊天内容
+export function chatMessageContent(data: any) {
+  return request({
+      url: '/it_chat/message/list',
+      method: 'GET',
+      params: data
+  })
+}
