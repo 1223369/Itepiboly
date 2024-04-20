@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { messageStore } from "@/store/message";
-import { chatMessageContent } from "@/api/message";
+import { chatMessageContent, chatMessageContentAdd } from "@/api/message";
 import { useRouter } from "vue-router";
-import { reactive } from "vue";
+import { reactive, provide } from "vue";
 import { showToast } from "vant";
 import { onBeforeUnmount } from "vue";
-import TalkWords from "@/views/message/components/TalkWords.vue"
+import TalkWords from "./components/TalkWords.vue";
+import TalkEmoji from "./components/TalkEmoji.vue";
 
 const router = useRouter();
 const store = messageStore();
@@ -19,6 +20,7 @@ const state = reactive({
   taskName: "", // 任务名称
   createSetInterval: null, // 轮询定时器
   worksVisible: false, // 常用语列表是否显示
+  emojiVisible: false, // emoji列表是否显示
 });
 
 store.getSystemMessageList();
@@ -34,7 +36,6 @@ const getChatMessageContent = async () => {
   if (res) {
     state.list = res.data;
     state.taskName = (res.data[0] && res.data[0].task_name) || "任务";
-    console.log('res', res)
   } else {
     showToast(res.msg);
   }
@@ -42,36 +43,76 @@ const getChatMessageContent = async () => {
 
 // 轮询
 const createInterval = () => {
-  stopSetInterval()
+  stopSetInterval();
   state.createSetInterval = setInterval(() => {
-    getChatMessageContent()
-  },5000)
-}
+    getChatMessageContent();
+  }, 5000);
+};
 
 // 停止轮询
 const stopSetInterval = () => {
   if (state.createSetInterval) {
-    clearInterval(state.createSetInterval)
-    state.createSetInterval = null
+    clearInterval(state.createSetInterval);
+    state.createSetInterval = null;
   }
-}
+};
 
 // 点击常用语
 const worksClick = () => {
-  console.log('1111')
-  state.worksVisible =!state.worksVisible;
-}
+  state.emojiVisible = false;
+  state.worksVisible = !state.worksVisible;
+};
+
+// 向输入框中插入常用语
+const worksChange = (value: string) => {
+  state.value = value;
+  state.worksVisible = false;
+};
+
+const emojiClick = () => {
+  state.worksVisible = false;
+  state.emojiVisible = !state.emojiVisible;
+};
+
+// 向输入框中插入emoji
+const emojiChange = (value: string) => {
+  state.value = state.value + value;
+};
+
+// 发送消息
+const sendSubmit = async () => {
+  state.loading = true;
+  const res = await chatMessageContentAdd({
+    receive_id: receiveId,
+    things_id: taskId,
+    content: state.value,
+    things_type: 0,
+  });
+  if (res) {
+    getChatMessageContent
+    state.value = "";
+    state.worksVisible = false;
+    state.emojiVisible = false;
+  }
+  showToast(res.msg)
+};
+
+// 父子组件通信
+provide("popup", {
+  worksChange,
+  emojiChange,
+});
 
 // 方法调用
 getChatMessageContent();
 createInterval();
 
 // 生命周期
- // 页面注销前
- onBeforeUnmount(() => {
-   // 停止轮询
-   stopSetInterval()
- })
+// 页面注销前
+onBeforeUnmount(() => {
+  // 停止轮询
+  stopSetInterval();
+});
 
 const leftBack = () => history.back();
 </script>
@@ -82,10 +123,18 @@ const leftBack = () => history.back();
   <!-- 对话内容 -->
   <div class="talk-page">
     <dl>
-      <dt v-for="(item, index) in state.list" :key="index" :class="item.receive_id == receiveId? 'active' : ''">
+      <dt
+        v-for="(item, index) in state.list"
+        :key="index"
+        :class="item.receive_id == receiveId ? 'active' : ''"
+      >
         <h5>{{ item.create_time }}</h5>
         <div>
-          <img v-if="item.receive_id == receiveId" :src="item.senderPhoto" alt="" />
+          <img
+            v-if="item.receive_id == receiveId"
+            :src="item.senderPhoto"
+            alt=""
+          />
           <img v-else :src="item.receivePhoto" alt="" />
           <p>{{ item.text }}</p>
         </div>
@@ -97,16 +146,15 @@ const leftBack = () => history.back();
   <div class="talk-bottom">
     <div class="talk-input">
       <span @click="worksClick">常用语</span>
-      <input type="text" />
-      <van-icon name="smile-o" @click="" />
-      <span>发送</span>
+      <input v-model="state.value" type="text" />
+      <van-icon name="smile-o" @click="emojiClick" />
+      <span @click="sendSubmit">发送</span>
     </div>
-      <!-- 常用语列表 -->
-      <TalkWords v-if="state.worksVisible"></TalkWords>
+    <!-- 常用语列表 -->
+    <TalkWords v-if="state.worksVisible"></TalkWords>
+    <!-- 表情列表 -->
+    <TalkEmoji v-if="state.emojiVisible"></TalkEmoji>
   </div>
-
-
-
 </template>
 
 <style scoped lang="scss">

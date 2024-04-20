@@ -1,51 +1,91 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import {} from "@/api/message";
+import { reactive, inject, provide } from "vue";
+import { chatMessageWordsList } from "@/api/message";
 import { showToast } from "vant";
+import TalkWordsAdd from "./TalkWordsAdd.vue";
+import TalkWordsManage from "./TalkWordsManage.vue";
 
 const state = reactive({
-  // 合同列表
+  // 常用语列表
   list: [],
   loading: false,
-  // 页面是不是首次加载
-  activeIndex: 0,
+  addBool: false,
+  manageBool: false,
 });
 
-// 获取列表
-const getContractList = async () => {
-  state.loading = true;
-  // const res = await contractList({});
+const { worksChange } = inject("popup");
 
-  // if (res) {
-  //   state.list = res.records;
-  // } else {
-  //   showToast(res.msg);
-  // }
+// 获取列表
+const getChatMessageWordsList = async () => {
+  state.loading = true;
+  const res = await chatMessageWordsList({});
+
+  if (res) {
+    state.list = res.data;
+  } else {
+    showToast(res.msg);
+  }
   state.loading = false;
-  state.activeIndex++;
 };
 
+// 关闭常用语添加弹窗
+const closeWorksAdd = () => {
+  state.addBool = false;
+  getChatMessageWordsList();
+};
+
+// 关闭常用语管理弹窗
+const closeWorksManage = () => {
+  state.manageBool = false;
+  getChatMessageWordsList();
+};
+
+// 父子组件通信
+provide("popup", {
+  closeWorksAdd,
+  closeWorksManage,
+});
+
 // 方法调用
-getContractList();
+getChatMessageWordsList();
 </script>
 
 <template>
   <div class="talk-word">
     <dl>
-      <dt></dt>
+      <dt v-for="(item, index) in state.list" :key="index"  @click="worksChange(item.text)">{{ item.text }}</dt>
     </dl>
 
     <div class="talk-word-btn">
-      <p>
+      <p @click="state.addBool = true">
         <img src="@/assets/img/icon/icon-add.png" alt="" />
         添加
       </p>
       <i></i>
-      <p>
+      <p @click="state.manageBool = true">
         <img src="@/assets/img/icon/icon-file.png" alt="" />
         管理
       </p>
     </div>
+
+    <!--常用语添加弹窗-->
+    <van-popup
+      v-model:show="state.addBool"
+      position="top"
+      duration="0"
+      :style="{ width: '100%', height: '100%' }"
+    >
+      <TalkWordsAdd title="添加常用语"></TalkWordsAdd>
+    </van-popup>
+    <!--常用语管理弹窗-->
+    <van-popup
+      v-model:show="state.manageBool"
+      position="top"
+      duration="0"
+      :style="{ width: '100%', height: '100%' }"
+    >
+      <TalkWordsManage></TalkWordsManage>
+    </van-popup>
   </div>
 </template>
 
