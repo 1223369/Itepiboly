@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import { inject } from "vue";
-import { cityList } from "@/api/task";
 import { taskStore } from "@/store/task";
-import { showToast } from "vant";
 
 const store = taskStore();
 // 获取父组件传递的方法
 const { closeCitySwitch } = inject('popup')
 
-const getCityList = async () => {
-        const res = await cityList()
-        if(res){
-            store.setCityList(res)
-        }else{
-            showToast(res.msg)
-        }
-    }
-  if(store.cityList.length <= 0) getCityList();
+// const getCityList = async () => {
+//         const res = await cityList()
+//         if(res){
+//             store.setCityList(res)
+//         }else{
+//             showToast(res.msg)
+//         }
+//     }
+  if(store.cityList.length <= 0) store.getCityList();
 
 const leftBack = () => closeCitySwitch();
 </script>
@@ -26,7 +24,7 @@ const leftBack = () => closeCitySwitch();
   <div class="city-switch">
     <h3>当前城市</h3>
     <div class="city-switch-text">
-      <span @click="leftBack(store.cityValue)">{{ store.cityValue }}</span>
+      <span>{{ store.cityValue }}</span>
     </div>
     <h3>其他城市</h3>
     <div class="city-switch-text">

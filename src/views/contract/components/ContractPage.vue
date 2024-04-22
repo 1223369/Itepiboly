@@ -130,6 +130,7 @@ getContractList();
 </template>
 
 <style scoped lang="scss">
+// 解决下拉刷新高度不够
 .van-pull-refresh {
   height: calc(100vh - 46px - 5rem);
   overflow: auto;

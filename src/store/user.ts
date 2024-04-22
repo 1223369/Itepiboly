@@ -20,6 +20,13 @@ export const userStore = defineStore( {
       this.role = data.user_info.role || '1'
       localStorage.setItem('token', this.token)
       localStorage.setItem('role', this.role)
+    },
+    // 退出登录
+    logout() {
+      this.token = ''
+      this.userInfo = {}
+      localStorage.removeItem('token')
+      localStorage.removeItem('role')
     }
   }
 

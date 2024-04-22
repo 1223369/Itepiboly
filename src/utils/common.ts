@@ -24,3 +24,12 @@ export const directive = (app: any) => {
     }
   })
 }
+
+// 格式化性别
+export const formatGender =  {
+  sex: function (type: number) {
+    if (type === 1) return '男'
+    else if (type === 2) return '女'
+    else return '未知'
+  }
+}
