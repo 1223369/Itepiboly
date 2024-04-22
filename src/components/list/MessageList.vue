@@ -11,7 +11,7 @@ const props = defineProps({
   },
   type: {
     type: String,
-  }
+  },
 });
 
 //跳转对应页面
@@ -19,32 +19,37 @@ const gotoDetail = (item: any) => {
   if (props.type === "system") {
     router.push("/message/systemList");
   } else if (props.type === "talk") {
-    router.push("/message/talk/"+item.things_id +'/'+item.send_id);
+    router.push("/message/talk/" + item.things_id + "/" + item.send_id);
   }
-  
 };
 </script>
 
 <template>
-  <dl v-for="(item, index) in messageList" :key="index" @click="gotoDetail((item as any))">
-    <!-- 头像姓名 -->
-    <dd>
-      <img v-if="item.receive_is_read" :src="item.receive_is_read">
-      <img v-else src="@/assets/img/icon/icon-message.png">
-      <span v-if="item.is_show"></span>
-    </dd>
+    <dl
+      v-for="(item, index) in messageList"
+      :key="index"
+      @click="gotoDetail(item as any)"
+    >
+      <!-- 头像姓名 -->
+      <dd>
+        <img v-if="item.receive_is_read" :src="item.receive_is_read" />
+        <img v-else src="@/assets/img/icon/icon-message.png" />
+        <span v-if="item.is_show"></span>
+      </dd>
 
-    <!-- 消息内容 -->
-    <dt>
-      <h3>{{ item.title }}
-        <span>{{ item.create_time }}</span>
-      </h3>
-      <p>{{ item.content }}</p>
-    </dt>
-  </dl>
+      <!-- 消息内容 -->
+      <dt>
+        <h3>
+          {{ item.title }}
+          <span>{{ item.create_time }}</span>
+        </h3>
+        <p>{{ item.content }}</p>
+      </dt>
+    </dl>
 </template>
 
 <style scoped lang="scss">
+
 dl {
   font-size: 0.64rem;
   color: #666666;
@@ -56,7 +61,6 @@ dl {
 
   dd {
     position: relative;
-    ;
     margin-right: 0.56rem;
 
     img {
@@ -71,7 +75,7 @@ dl {
       right: 0;
       width: 0.32rem;
       height: 0.32rem;
-      background: #FF0000;
+      background: #ff0000;
       border-radius: 50%;
     }
   }
@@ -85,7 +89,7 @@ dl {
       color: #333333;
       margin-bottom: 0.43rem;
 
-      span {  
+      span {
         float: right;
         color: #999999;
         font-size: 0.64rem;
