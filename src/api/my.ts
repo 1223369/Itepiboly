@@ -38,3 +38,30 @@ export function collectList() {
       params: {}
   })
 }
+
+// 获取我的提现接口
+export function transferList() {
+  return request({
+      url: '/my/transfer/userList',
+      method: 'GET',
+      params: {}
+  })
+}
+
+// 获取我的收入接口
+export function incomeList(data: any) {
+  return request({
+      url: '/admin/task/purchaseRecord',
+      method: 'GET',
+      params: data
+  })
+}
+
+// 我的提现接口
+export function withdrawal(data: any) {
+  return request({
+      url: '/my/apply/transfer',
+      method: 'POST',
+      data
+  })
+}
