@@ -2,32 +2,47 @@
 <script setup lang="ts">
 import { ref, provide } from "vue";
 import UserInfoPage from "../../components/UserInfoPage.vue";
+import { myStore } from "@/store/my";
+
+
+const store = myStore()
+
+// 接收父组件传参
+const props = defineProps({
+  item: {
+    type: Object,
+  },
+});
 
 const state = ref({
   show: false,
 });
 
-
 // 关闭弹窗
 const closeChange = () => {
   state.value.show = false;
-}
+  store.getResumeDetail();
+};
 
 // 向子组件传参数
 provide("popup", {
-  closeChange
+  closeChange,
 });
-
-
 </script>
 
 <template>
   <div class="person-info" @click="state.show = true">
     <div class="info-left">
-      <h3>测试<img src="@/assets/img/my/icon-feedback.png" /></h3>
-      <p>8年 | 本科 | 22岁</p>
+      <h3>
+        {{ props.item.user_name
+        }}<img src="@/assets/img/my/icon-feedback.png" />
+      </h3>
+      <p>
+        {{ props.item.work_year }} | {{ props.item.highest_education }} |
+        {{ props.item.ago }}
+      </p>
     </div>
-    <img src="" alt="" />
+    <img :src="props.item.it_head" alt="" />
   </div>
 
   <!-- 编辑个人信息弹窗 -->
@@ -65,12 +80,17 @@ provide("popup", {
       font-weight: 300;
       color: #666666;
     }
+    img {
+      width: 1rem;
+      height: 1rem;
+      margin-left: 0.32rem;
+    }
   }
 
   img {
-    width: 1rem;
-    height: 1rem;
-    margin-left: 0.32rem;
+    width: 3.19rem;
+    height: 3.19rem;
+    border-radius: 50%;
   }
 }
 </style>

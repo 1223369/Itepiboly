@@ -6,7 +6,15 @@ import ExcellentSkill from "./components/ExcellentSkill.vue";
 import WorkExperience from "./components/WorkExperience.vue";
 import ProjectExperience from "./components/ProjectExperience.vue";
 import EducationalExperience from "./components/EducationalExperience.vue";
+import { myStore } from "@/store/my";
 
+
+const store = myStore();
+
+// 获取store中的简历详情
+store.getResumeDetail()
+// 获取简历字典类型
+store.getResumeDict()
 
 const leftBack = () => history.back();
 </script>
@@ -14,7 +22,7 @@ const leftBack = () => history.back();
 <template>
   
   <van-nav-bar title="我的简历" left-arrow @click-left="leftBack" />
-  <PersonInfo></PersonInfo>
+  <PersonInfo :item="store.resumeInfo"></PersonInfo>
   <PersonAdvantage></PersonAdvantage>
   <PositionType></PositionType>
   <ExcellentSkill></ExcellentSkill>
