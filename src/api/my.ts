@@ -114,3 +114,21 @@ export function labelsSkill() {
       }
   })
 }
+
+// 我的简历擅长技能保存接口
+export function resumeSkill(data: any) {
+  return request({
+      url: '/resume/skill',
+      method: 'POST',
+      data
+  })
+}
+
+// 我的简历工作经历删除接口
+export function workDelete(data: any) {
+  return request({
+      url: '/job/resume/work/delete',
+      method: 'DELETE',
+      params: data
+  })
+}

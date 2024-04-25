@@ -27,10 +27,26 @@ provide("popup", {
     <h3>
       擅长技能<van-icon name="add-o" @click="state.show = true"></van-icon>
     </h3>
-    <dl class="text-list">
-      <dt>vue</dt>
+    <dl
+      v-if="store.resumeInfo.sys_skill_ids || store.resumeInfo.skill_ids"
+      class="text-list"
+    >
+      <dt
+        v-if="store.resumeInfo.sys_skill_ids"
+        v-for="(item, index) in store.resumeInfo.sys_skill_ids.split(',')"
+        :key="index"
+      >
+        {{ item }}
+      </dt>
+      <dt
+        v-if="store.resumeInfo.skill_ids"
+        v-for="(item, index) in store.resumeInfo.skill_ids.split(',')"
+        :key="index"
+      >
+        {{ item }}
+      </dt>
     </dl>
-    <!-- <label>请您选择擅长技能</label> -->
+    <label v-else>请您选择擅长技能</label>
   </div>
 
   <!-- 编辑个人优势弹窗 -->

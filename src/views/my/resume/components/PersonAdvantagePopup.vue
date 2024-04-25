@@ -24,8 +24,10 @@
     })
     if (res) {
       closeChange()
+      showToast('保存成功')  
+    } else {
+      showToast(res.msg)
     }
-    showToast(res.msg)
   }
 
 </script>
