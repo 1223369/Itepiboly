@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { reactive,nextTick,onActivated,onMounted, ref } from "vue";
+import { reactive, nextTick, onActivated, onMounted, ref } from "vue";
 import { contractList } from "@/api/constract";
 import ContractList from "@/components/list/ContractList.vue";
 import { showToast } from "vant";
-import { contractStore } from '@/store/cotract'
+import { contractStore } from "@/store/cotract";
 import { onBeforeRouteLeave } from "vue-router";
 import { onUpdated } from "vue";
 
@@ -26,11 +26,26 @@ const tabs = [
   },
 ];
 
+// 获取父组件传值
+const props = defineProps({
+  type: {
+    type: String,
+  },
+});
+
+// 根据props的值设置tabs
+if (props.type === "0") {
+  tabs.unshift({
+    type: 0,
+    text: "全部",
+  });
+}
+
 // 引入store
 const store = contractStore();
 
 const state = reactive({
-  type: tabs[0].type,
+  type: props.type || tabs[0].type,
   // 合同列表
   list: [],
   loading: false,
@@ -40,7 +55,6 @@ const state = reactive({
 
 // 是否有滚动条
 let isScroll = ref<boolean>(false);
-
 
 // 获取列表
 const getContractList = async () => {
@@ -66,35 +80,36 @@ const setTabList = (type: number) => {
 };
 
 onUpdated(() => {
-	// 监听滚动条位置
-	document.addEventListener("scroll", scrollTop, true);
-	
-	// 设置对应元素的滚动条
-	let elVal: any = document.getElementsByClassName('task-list')[0];
-	// 判断是否存在滚动条
-	isScroll.value = elVal.scrollHeight > elVal.clientHeight;
+  // 监听滚动条位置
+  document.addEventListener("scroll", scrollTop, true);
+
+  // 设置对应元素的滚动条
+  let elVal: any = document.getElementsByClassName("task-list")[0];
+  // 判断是否存在滚动条
+  isScroll.value = elVal.scrollHeight > elVal.clientHeight;
 });
 
 // 实时滚动条高度
 const scrollTop = () => {
-	nextTick(() => {
-		let elVal: any = document.getElementsByClassName('task-list')[0];
-		store.setContractScoll(elVal.scrollTop);
-	});
+  nextTick(() => {
+    let elVal: any = document.getElementsByClassName("task-list")[0];
+    store.setContractScoll(elVal.scrollTop);
+  });
 };
 
 // 保持页面状态
 onActivated(() => {
-   // 保持上次浏览位置
+  // 保持上次浏览位置
   nextTick(() => {
-    document.getElementsByClassName('task-list')[0].scrollTop = store.contractScoll;
+    document.getElementsByClassName("task-list")[0].scrollTop =
+      store.contractScoll;
   });
 });
 
 //记录滚动位置
 onBeforeRouteLeave((to, from, next) => {
   // 参数必须和挂载时保持一致
-	document.removeEventListener('scroll', scrollTop, true);
+  document.removeEventListener("scroll", scrollTop, true);
   next();
 });
 
@@ -105,7 +120,7 @@ getContractList();
 <template>
   <div class="contract-tab">
     <span
-      :class="{ active: tab.type === state.type }"
+      :class="Number(state.type) === tab.type? 'active' : '' "
       v-for="tab in tabs"
       :key="tab.type"
       @click="setTabList(tab.type)"
@@ -121,7 +136,9 @@ getContractList();
     @refresh="getContractList"
   >
     <ContractList :contractList="state.list"></ContractList>
-    <van-loading v-if="state.activeIndex === 0 &&state.loading">加载中...</van-loading>
+    <van-loading v-if="state.activeIndex === 0 && state.loading"
+      >加载中...</van-loading
+    >
     <!-- 暂无数据显示 -->
     <div class="wy-no-data" v-if="!state.loading && state.list.length === 0">
       暂无数据

@@ -95,6 +95,10 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/my/set/index.vue"),
   },
   {
+    path: "/my/contract/:id",
+    component: () => import("@/views/my/contract/index.vue"),
+  },
+  {
     path: "/my/feedback",
     component: () => import("@/views/my/feedback/index.vue"),
   },

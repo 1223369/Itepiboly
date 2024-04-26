@@ -49,22 +49,22 @@ const gotoPage = (path: string) => {
     <div class="my-contract">
       <div class="my-title">
         <h3>我的合约</h3>
-        <span>查看全部合约</span>
+        <span @click="gotoPage('/my/contract/0')">查看全部合约<van-icon name="arrow" /></span>
       </div>
       <div class="my-contract-cur">
-        <span>
+        <span @click="gotoPage('/my/contract/2')">
           <img src="@/assets/img/my/contract-be-signed.png" alt="" />
           <p>待签约</p>
         </span>
-        <span>
+        <span @click="gotoPage('/my/contract/3')">
           <img src="@/assets/img/my/contract-in-performance.png" alt="" />
           <p>履约中</p>
         </span>
-        <span>
+        <span @click="gotoPage('/my/contract/4')">
           <img src="@/assets/img/my/contract-completed.png" alt="" />
           <p>已完成</p>
         </span>
-        <span>
+        <span @click="gotoPage('/my/contract/5')">
           <img src="@/assets/img/my/contract-canceled.png" alt="" />
           <p>已取消</p>
         </span>
