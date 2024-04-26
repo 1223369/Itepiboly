@@ -8,7 +8,7 @@ import store from './store'
 import router from './router'
 import { directive } from './utils/common'
 import { Button,NavBar,Tabbar,TabbarItem,Checkbox,Toast,Icon,Popup,Swipe, SwipeItem,List,PullRefresh,ActionBarIcon,Search,
-  Loading,Field,SwipeCell,Uploader,Form,ActionSheet,Picker,CheckboxGroup,Dialog,Switch,RadioGroup, Radio,DatePicker  } from 'vant'
+  Loading,Field,SwipeCell,Uploader,Form,ActionSheet,Picker,CheckboxGroup,Dialog,Switch,RadioGroup, Radio,DatePicker,CellGroup  } from 'vant'
 
 
 //创建vue实例
@@ -46,6 +46,7 @@ app.use(RadioGroup)
 app.use(Radio)
 app.use(ActionSheet)
 app.use(DatePicker)
+app.use(CellGroup)
 
 //挂载实例
 app.mount('#app')

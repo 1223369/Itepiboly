@@ -132,3 +132,58 @@ export function workDelete(data: any) {
       params: data
   })
 }
+
+// 我的简历工作经历添加接口
+export function addWorkExper(data: any) {
+  return request({
+      url: '/admin/resume/work/add',
+      method: 'POST',
+      data
+  })
+}
+
+// 我的简历工作经历修改接口
+export function editWorkExper(data: any) {
+  return request({
+      url: '/resume/work/edit',
+      method: 'PUT',
+      data
+  })
+}
+
+// 我的简历项目经历删除接口
+export function projectDelete(data: any) {
+  return request({
+      url: '/admin/resume/project/delete',
+      method: 'DELETE',
+      data,
+      params: data
+  })
+}
+
+// 我的简历项目经历添加接口
+export function addProjectExper(data: any) {
+  return request({
+      url: '/admin/resume/project/add',
+      method: 'POST',
+      data
+  })
+}
+
+// 我的简历项目经历修改接口
+export function editProjectExper(data: any) {
+  return request({
+      url: '/admin/resume/project/edit',
+      method: 'PUT',
+      data
+  })
+}
+
+// 我的简历教育经历保存接口
+export function editEdu(data: any) {
+  return request({
+      url: '/resume/edu/edit',
+      method: 'PUT',
+      data
+  })
+}

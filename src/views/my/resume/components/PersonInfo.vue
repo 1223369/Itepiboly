@@ -12,6 +12,9 @@ const props = defineProps({
   item: {
     type: Object,
   },
+  page: {
+    type: String,
+  }
 });
 
 const state = ref({
@@ -31,11 +34,11 @@ provide("popup", {
 </script>
 
 <template>
-  <div class="person-info" @click="state.show = true">
+  <div class="person-info" >
     <div class="info-left">
       <h3>
         {{ props.item.user_name
-        }}<img src="@/assets/img/my/icon-feedback.png" />
+        }}<img src="@/assets/img/my/icon-feedback.png" v-if="props.page!=='preview'" @click="state.show = true"/>
       </h3>
       <p>
         {{ props.item.work_year }} | {{ props.item.highest_education }} |

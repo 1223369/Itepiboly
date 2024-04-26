@@ -10,12 +10,13 @@ export const myStore = defineStore({
       companyList: [], // 工作经历
       projectList: [], // 项目经历
       experience: [], // 工作经历类型字典
-      highestEducation: [], // 最高学历类型字典
+      highestEducation: <Array<any>>[], // 最高学历类型字典
       jobsType: [], // 职位类型字典
       salaryScope: <any>[], // 薪资范围字典
       sysSkillList: [], // 我的简历擅长技能
     };
   },
+  
 
   actions: {
     // 获取用户详情
@@ -42,7 +43,14 @@ export const myStore = defineStore({
       const res = await resumeDict();
       if (res && res.data) {
         this.experience = res.data.experience;
-        this.highestEducation = res.data.highestEducation;
+        // 转换highestEducation为数组类型
+        let edu = [];
+        for (let i = 0; i < res.data.highestEducation.length; i++) {
+          edu.push({
+            name: res.data.highestEducation[i].value,
+          });
+        }
+        this.highestEducation = edu;
         this.jobsType = res.data.jobsType;
         // 转换salaryScope为数组类型
         let arr = [];
@@ -63,5 +71,6 @@ export const myStore = defineStore({
         this.sysSkillList = res.data
       }
     },
+    
   },
 });

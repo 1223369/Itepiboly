@@ -10,6 +10,12 @@ const state = ref({
   show: false,
 });
 
+const props = defineProps({
+  page: {
+    type: String,
+  }
+})
+
 // 关闭弹窗
 const closeChange = () => {
   state.value.show = false;
@@ -25,7 +31,7 @@ provide("popup", {
 <template>
   <div class="resume-label">
     <h3>
-      求职意愿<van-icon name="add-o" @click="state.show = true"></van-icon>
+      求职意愿<van-icon name="add-o" v-if="props.page!=='preview'" @click="state.show = true"></van-icon>
     </h3>
     <label
       v-if="

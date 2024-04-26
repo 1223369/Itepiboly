@@ -13,6 +13,12 @@ const state = ref({
   item: {}, // 弹窗里的数据
 });
 
+const props = defineProps({
+  page: {
+    type: String,
+  }
+})
+
 // 关闭弹窗
 const closeChange = () => {
   state.value.show = false;
@@ -21,7 +27,9 @@ const closeChange = () => {
 
 // 添加工作
 const addWork = () => {
-  state.value.item = {}
+  state.value.item = {
+    uuid: store.resumeInfo.id,
+  };
   state.value.show = true;
 };
 
@@ -52,30 +60,34 @@ provide("popup", {
 
 <template>
   <div class="resume-label">
-    <h3>
-      工作经历<van-icon name="add-o" @click="addWork"></van-icon>
-    </h3>
+    <h3>工作经历<van-icon name="add-o" v-if="props.page!=='preview'" @click="addWork"></van-icon></h3>
     <van-swipe-cell
       v-if="store.companyList.length > 0"
       v-for="item in store.companyList"
       :key="item.id"
     >
-      <h4>{{ item.company_name }}<van-icon name="arrow" @click="editWork(item)"/></h4>
+      <h4>
+        {{ item.company_name }}<van-icon name="arrow" @click="editWork(item)" />
+      </h4>
       <h5>{{ item.work_position }}</h5>
       <p>{{ item.start_time }} - {{ item.end_time }}</p>
       <h5>工作描述</h5>
-      <van-field
-        v-model="item.company_describe"
-        autosize
-        readonly
-        label=""
-        type="textarea"
-      />
+      <van-cell-group inset>
+        <van-field
+          v-model="item.company_describe"
+          autosize
+          readonly
+          label=""
+          type="textarea"
+        />
+      </van-cell-group>
+
       <template #right>
         <img
           @click="submitDelect(item.id)"
           src="@/assets/img/icon/icon-delete.png"
           class="delete"
+          v-if="props.page!=='preview'"
         />
       </template>
     </van-swipe-cell>
@@ -89,7 +101,7 @@ provide("popup", {
     duration="0"
     :style="{ width: '100%', height: '100%' }"
   >
-    <WorkExperiencePopup :state.item></WorkExperiencePopup>
+    <WorkExperiencePopup :item="state.item"></WorkExperiencePopup>
   </van-popup>
 </template>
 
