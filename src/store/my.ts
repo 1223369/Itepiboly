@@ -14,6 +14,7 @@ export const myStore = defineStore({
       jobsType: [], // 职位类型字典
       salaryScope: <any>[], // 薪资范围字典
       sysSkillList: [], // 我的简历擅长技能
+      loading: false, // 加载状态
     };
   },
   
@@ -30,12 +31,14 @@ export const myStore = defineStore({
     // 获取我的简历详情
     async getResumeDetail() {
       if (Object.keys({}).length === 0) await this.getUserInfo();
+      this.loading = true;
       const res = await resumeDetail(this.userInfo);
       if (res && res.data[0]) {
         this.resumeInfo = res.data[0].info[0];
         this.companyList = res.data[0].companyList;
         this.projectList = res.data[0].projectList;
       }
+      this.loading = false;
     },
 
     // 获取我的简历类型字典接口

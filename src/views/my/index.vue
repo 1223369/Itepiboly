@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import FooterTabbar from "@/components/FooterTabbar.vue";
 import { myStore } from "@/store/my";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import CustomerManager from './components/CustomerManager.vue'
 
 const store = myStore();
 const router = useRouter();
 if (!store.userInfo.user_name) store.getUserInfo()
+
+const state = ref({
+    show: false, // 专属客户经理弹窗显示状态
+    count: {}
+  })
 
 // 前往设置页
 const gotoPage = (path: string) => {
@@ -81,7 +88,7 @@ const gotoPage = (path: string) => {
         <label for="">实名认证</label>
         <span><van-icon name="arrow"></van-icon></span>
       </div>
-      <div class="my-item">
+      <div class="my-item" @click="state.show = true">
         <img src="@/assets/img/my/icon-account-manager.png" alt="" />
         <label for="">专属客户经理</label>
         <span
@@ -111,6 +118,12 @@ const gotoPage = (path: string) => {
         <span>当前为{{store.userInfo.role===1?'IT企业人才':store.userInfo.role===3?'企业端':'管理端'}}身份<van-icon name="arrow"></van-icon></span>
       </div>
     </div>
+
+    <!-- 专属客户经理弹窗 -->
+    <van-popup v-model:show="state.show" duration="0" :style="{ width: '13.07rem',height: '15.44rem',borderRadius:'0.53rem' }">
+      <CustomerManager @back="state.show = false" :item="store.userInfo"></CustomerManager>
+    </van-popup>
+
   </div>
   <FooterTabbar></FooterTabbar>
 </template>

@@ -14,27 +14,28 @@ const store = myStore();
 store.getResumeDetail();
 // 获取简历字典类型
 store.getResumeDict();
-
+console.log("store.loading", store.loading);
 const leftBack = () => history.back();
 </script>
 
 <template>
   <div class="resume">
-    <van-nav-bar fixed title="我的简历" left-arrow @click-left="leftBack" />
-    <PersonInfo :item="store.resumeInfo"></PersonInfo>
-    <PersonAdvantage></PersonAdvantage>
-    <PositionType></PositionType>
-    <ExcellentSkill></ExcellentSkill>
-    <WorkExperience></WorkExperience>
-    <ProjectExperience></ProjectExperience>
-    <EducationalExperience></EducationalExperience>
+    <van-loading v-if="store.loading" size="24px" vertical>加载中...</van-loading>
+    <div v-if="!store.loading">
+      <van-nav-bar fixed title="我的简历" left-arrow @click-left="leftBack" />
+      <PersonInfo :item="store.resumeInfo"></PersonInfo>
+      <PersonAdvantage></PersonAdvantage>
+      <PositionType></PositionType>
+      <ExcellentSkill></ExcellentSkill>
+      <WorkExperience></WorkExperience>
+      <ProjectExperience></ProjectExperience>
+      <EducationalExperience></EducationalExperience>
+    </div>
   </div>
-    
+
   <router-link to="/my/resume/preview">
     <button class="resume-btn">预览简历</button>
   </router-link>
-    
-
 </template>
 
 <style scoped lang="scss">
