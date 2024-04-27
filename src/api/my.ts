@@ -187,3 +187,12 @@ export function editEdu(data: any) {
       data
   })
 }
+
+// 实名认证保存接口
+export function addAuthReal(data: any) {
+  return request({
+      url: '/real/auth/user',
+      method: 'POST',
+      data
+  })
+}

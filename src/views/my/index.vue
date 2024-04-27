@@ -76,7 +76,7 @@ const gotoPage = (path: string) => {
       <div class="my-title">
         <h3>常用功能</h3>
       </div>
-      <div class="my-item">
+      <div class="my-item" @click="gotoPage(store.userInfo.user_is_check === 1?'/my/user/certified':'/my/user/authReal')">
         <img src="@/assets/img/my/icon-real-name-auth.png" alt="" />
         <label for="">实名认证</label>
         <span><van-icon name="arrow"></van-icon></span>
