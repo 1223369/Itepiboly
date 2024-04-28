@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { myStore } from "@/store/my"
+import { myStore } from "@/store/my";
+import { addRole } from "@/api/my"; 
+import { showToast } from "vant";
+import IdentityPopup from './IdentityPopup.vue'
 import img1 from "@/assets/img/my/icon-personnel.png";
 import bg1 from "@/assets/img/my/personnel-bg.png";
 import img2 from "@/assets/img/my/icon-controller.png";
@@ -8,9 +11,8 @@ import bg2 from "@/assets/img/my/controller-bg.png";
 import img3 from "@/assets/img/my/icon-enterprise.png";
 import bg3 from "@/assets/img/my/enterprise-bg.png";
 
-const store = myStore()
-if (Object.keys(store.userInfo).length === 0) store.getUserInfo()
-
+const store = myStore();
+if (Object.keys(store.userInfo).length === 0) store.getUserInfo();
 
 const switchList = [
   {
@@ -18,29 +20,63 @@ const switchList = [
     name: "IT企业人才",
     img: img1,
     bg: bg1,
-    role: store.userInfo.it_enterprise !== 1
+    role: store.userInfo.it_enterprise !== 1,
   },
   {
     id: 2,
     name: "管理端",
     img: img2,
     bg: bg2,
-    role: store.userInfo.manage !== 1
+    role: store.userInfo.manage !== 1,
   },
   {
     id: 3,
     name: "企业端",
     img: img3,
     bg: bg3,
-    role: store.userInfo.enterprise !== 1
+    role: store.userInfo.enterprise !== 1,
   },
 ];
 
+const state = ref({
+  show: false, // 弹窗显示
+  role: store.userInfo.role, // 当前身份
+  switchRole: store.userInfo.role 
+});
 
+// 切换身份
+const setRole = async (role: number) => {
+  let bool = false;
+  if (
+    (role === 1 && store.userInfo.it_enterprise === 1) ||
+    (role === 2 && store.userInfo.manage === 1) ||
+    (role === 3 && store.userInfo.enterprise === 1)
+  ) {
+    bool = true;
+  }
+
+  if (!bool) {
+    const res = await addRole({
+      role: role,
+    });
+    if (res) {
+      showToast("身份切换成功");
+      store.getUserInfo();
+    }
+  } else {
+    state.role = role;
+    state.value.show = true;
+  }
+};
 </script>
 
 <template>
-  <div class="switch-item" v-for="item in switchList" :key="item.id">
+  <div
+    class="switch-item"
+    v-for="item in switchList"
+    :key="item.id"
+    @click="setRole(item.id)"
+  >
     <div class="item-cont">
       <img :src="item.img" alt="" />
       <div>
@@ -51,6 +87,17 @@ const switchList = [
     <img class="item-back" :src="item.bg" alt="" />
     <strong v-if="store.userInfo.role === item.id">当前身份</strong>
   </div>
+  <!--弹窗-->
+  <van-popup
+    v-model:show="state.show"
+    duration="0"
+    :style="{ width: '13.07rem', height: '15.44rem', borderRadius: '0.53rem' }"
+  >
+    <IdentityPopup
+      @back="state.show = false"
+      :role="state.role"
+    ></IdentityPopup>
+  </van-popup>
 </template>
 
 <style scoped lang="scss">

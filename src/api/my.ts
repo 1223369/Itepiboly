@@ -205,3 +205,21 @@ export function addFeedback(data: any) {
     data,
   });
 }
+
+// 身份切换保存接口
+export function addRole(data: any) {
+  return request({
+    url: "/user/identity/switch",
+    method: "POST",
+    data,
+  });
+}
+
+// 身份切换人才申请保存接口
+export function addPartnerPerson(data: any) {
+  return request({
+    url: "/settlein/itEnterprise/add",
+    method: "POST",
+    data,
+  });
+}

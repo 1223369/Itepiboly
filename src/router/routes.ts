@@ -135,6 +135,22 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/my/collect/index.vue"),
   },
   {
+    path: "/my/partner/person",
+    component: () => import("@/views/my/partner/person.vue"),
+  },
+  {
+    path: "/my/partner/admin",
+    component: () => import("@/views/my/partner/admin.vue"),
+  },
+  {
+    path: "/my/partner/person",
+    component: () => import("@/views/my/partner/person.vue"),
+  },
+  {
+    path: "/my/partner/company",
+    component: () => import("@/views/my/partner/company.vue"),
+  },
+  {
     path: "/talent",
     component: () => import("@/views/talent/index.vue"),
     meta: {

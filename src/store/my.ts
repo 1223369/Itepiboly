@@ -77,7 +77,6 @@ export const myStore = defineStore({
 
      // 退出登录
     logout() {
-      console.log('1111', 1111)
       this.userInfo = {}
     }
     
