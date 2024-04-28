@@ -103,6 +103,10 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/my/feedback/index.vue"),
   },
   {
+    path: "/my/about",
+    component: () => import("@/views/my/about/index.vue"),
+  },
+  {
     path: "/my/account",
     component: () => import("@/views/my/account/index.vue"),
   },

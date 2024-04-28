@@ -14,7 +14,7 @@ const state = ref({
     count: {}
   })
 
-// 前往设置页
+
 const gotoPage = (path: string) => {
   router.push(path);
 };
@@ -104,7 +104,7 @@ const gotoPage = (path: string) => {
         <label for="">意见反馈</label>
         <span><van-icon name="arrow"></van-icon></span>
       </div>
-      <div class="my-item">
+      <div class="my-item" @click="gotoPage('/my/about')">
         <img src="@/assets/img/my/icon-about.png" alt="" />
         <label for="">关于我们</label>
         <span><van-icon name="arrow"></van-icon></span>
