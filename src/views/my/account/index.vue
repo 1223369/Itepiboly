@@ -72,7 +72,7 @@ toCheck(0);
 </script>
 
 <template>
-  <van-nav-bar title="我的账户" left-arrow @click-left="leftBack" />
+  <van-nav-bar fixed title="我的账户" left-arrow @click-left="leftBack" />
   <AccountInfo></AccountInfo>
 
 

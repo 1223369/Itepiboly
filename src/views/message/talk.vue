@@ -118,7 +118,7 @@ const leftBack = () => history.back();
 </script>
 
 <template>
-  <van-nav-bar :title="state.taskName" left-arrow @click-left="leftBack" />
+  <van-nav-bar fixed :title="state.taskName" left-arrow @click-left="leftBack" />
 
   <!-- 对话内容 -->
   <div class="talk-page">
@@ -159,9 +159,10 @@ const leftBack = () => history.back();
 
 <style scoped lang="scss">
 .talk-page {
-  width: 100%;
+  width: 99%;
   background: #f3f3f3;
-  height: calc(100vh - 46px - 2.6rem);
+  margin-top: 2.8rem;
+  padding-bottom: 1rem;
 
   dl {
     padding: 0.96rem 0.64rem;
