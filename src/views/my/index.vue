@@ -112,7 +112,7 @@ const gotoPage = (path: string) => {
     </div>
     <div class="my-common">
       
-      <div class="my-item">
+      <div class="my-item" @click="gotoPage('/my/user/identitySwitch')">
         <img src="@/assets/img/my/icon-switch-role.png" alt="" />
         <label for="">切换身份</label>
         <span>当前为{{store.userInfo.role===1?'IT企业人才':store.userInfo.role===3?'企业端':'管理端'}}身份<van-icon name="arrow"></van-icon></span>

@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { userStore } from "@/store/user";
+import { myStore } from "@/store/my"
 import setItem from "../components/setItem.vue";
 import { showToast } from "vant";
 
 const router = useRouter();
 const store = userStore();
+const my = myStore();
 
 // 退出登录
 const logout = () => {
   store.logout();
+  my.logout();
   router.push("/login");
   showToast({
     message: "退出登录成功"
