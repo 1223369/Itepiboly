@@ -99,7 +99,7 @@ const gotoPage = (path: string) => {
       </div>
     </div>
     <div class="my-common">
-      <div class="my-item">
+      <div class="my-item" @click="gotoPage('/my/feedback')">
         <img src="@/assets/img/my/icon-feedback.png" alt="" />
         <label for="">意见反馈</label>
         <span><van-icon name="arrow"></van-icon></span>
