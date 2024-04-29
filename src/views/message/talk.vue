@@ -2,7 +2,7 @@
 import { messageStore } from "@/store/message";
 import { chatMessageContent, chatMessageContentAdd } from "@/api/message";
 import { useRouter } from "vue-router";
-import { reactive, provide, ref, nextTick,onBeforeUpdate } from "vue";
+import { reactive, provide, ref, nextTick, onBeforeUpdate } from "vue";
 import { showToast } from "vant";
 import { onBeforeUnmount } from "vue";
 import TalkWords from "./components/TalkWords.vue";
@@ -13,7 +13,7 @@ const store = messageStore();
 // 将路由携带的任务id赋值
 const taskId = router.currentRoute.value.params.taskId;
 const receiveId = router.currentRoute.value.params.userId;
-let chat = ref(null) // 获取元素
+let chat = ref(null); // 获取元素
 const state = reactive({
   list: "", // 消息列表
   loading: false, // 加载中
@@ -32,15 +32,16 @@ const scrollToBottom = () => {
   window.scrollTo({
     top: state.height,
     behavior: "smooth",
-  })
+  });
 };
 
 // 页面挂载时t
 onBeforeUpdate(() => {
+
   nextTick(() => {
     state.height =  chat.value[chat.value.length - 1].offsetTop;
   });
-  //页面滚动至底部
+  // //页面滚动至底部
   scrollToBottom();
 });
 
@@ -145,7 +146,7 @@ const leftBack = () => history.back();
   />
   <div class="task-top"></div>
   <!-- 对话内容 -->
-  <div class="talk-page">
+  <div class="talk-page" id="dom">
     <dl>
       <dt
         v-for="(item, index) in state.list"

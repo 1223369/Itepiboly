@@ -44,7 +44,7 @@ const setTaskCollection = async () => {
 
 // 立即沟通方法
 const gotoMessage = () => {
-  router.push("/message/talk/" + state.item.user_id);
+  router.push("/message/talk/" + state.item.user_id + '/' + state.item.task_id);
 };
 
 const leftBack = () => history.back();

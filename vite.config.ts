@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [vue()],
   server: {
     port: 8003,
+    host: '0.0.0.0',
     open: true,
     proxy: {
       '/api': 'https://api.imooc.zcwytd.com'

@@ -9,7 +9,7 @@ const props = defineProps({
     default: () => [],
   },
 });
-
+console.log('props', props)
 //跳转对应页面
 const gotoDetail = (id: number) => {
   

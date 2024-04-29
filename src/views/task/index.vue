@@ -163,12 +163,12 @@ getTaskAllList();
         placeholder="请输入想要搜索的内容"
         @click="gotoSearch"
       />
-      <route-link
+      <router-link
         to="/message/systemList"
         class="task-icon-message"
-      ></route-link>
+      ></router-link>
     </div>
-    <Banner></Banner>
+    <Banner :type="2"></Banner>
 
     <!-- 筛选 -->
     <div class="task-title">

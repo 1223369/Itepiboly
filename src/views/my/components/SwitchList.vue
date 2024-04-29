@@ -55,7 +55,7 @@ const setRole = async (role: number) => {
     bool = true;
   }
 
-  if (!bool) {
+  if (bool) {
     const res = await addRole({
       role: role,
     });
