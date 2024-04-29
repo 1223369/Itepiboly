@@ -2,7 +2,7 @@
 import { messageStore } from "@/store/message";
 import { chatMessageContent, chatMessageContentAdd } from "@/api/message";
 import { useRouter } from "vue-router";
-import { reactive, provide } from "vue";
+import { reactive, provide, ref, nextTick,onBeforeUpdate } from "vue";
 import { showToast } from "vant";
 import { onBeforeUnmount } from "vue";
 import TalkWords from "./components/TalkWords.vue";
@@ -13,6 +13,7 @@ const store = messageStore();
 // 将路由携带的任务id赋值
 const taskId = router.currentRoute.value.params.taskId;
 const receiveId = router.currentRoute.value.params.userId;
+let chat = ref(null) // 获取元素
 const state = reactive({
   list: "", // 消息列表
   loading: false, // 加载中
@@ -21,9 +22,27 @@ const state = reactive({
   createSetInterval: null, // 轮询定时器
   worksVisible: false, // 常用语列表是否显示
   emojiVisible: false, // emoji列表是否显示
+  height: null, // 页面最底部高度
 });
 
 store.getSystemMessageList();
+
+// 回滚至底部
+const scrollToBottom = () => {
+  window.scrollTo({
+    top: state.height,
+    behavior: "smooth",
+  })
+};
+
+// 页面挂载时t
+onBeforeUpdate(() => {
+  nextTick(() => {
+    state.height =  chat.value[chat.value.length - 1].offsetTop;
+  });
+  //页面滚动至底部
+  scrollToBottom();
+});
 
 // 请求对话数据
 const getChatMessageContent = async () => {
@@ -46,7 +65,7 @@ const createInterval = () => {
   stopSetInterval();
   state.createSetInterval = setInterval(() => {
     getChatMessageContent();
-  }, 5000);
+  }, 3000);
 };
 
 // 停止轮询
@@ -89,12 +108,12 @@ const sendSubmit = async () => {
     things_type: 0,
   });
   if (res) {
-    getChatMessageContent
+    getChatMessageContent;
     state.value = "";
     state.worksVisible = false;
     state.emojiVisible = false;
   }
-  showToast(res.msg)
+  showToast(res.msg);
 };
 
 // 父子组件通信
@@ -118,8 +137,13 @@ const leftBack = () => history.back();
 </script>
 
 <template>
-  <van-nav-bar fixed :title="state.taskName" left-arrow @click-left="leftBack" />
-
+  <van-nav-bar
+    fixed
+    :title="state.taskName"
+    left-arrow
+    @click-left="leftBack"
+  />
+  <div class="task-top"></div>
   <!-- 对话内容 -->
   <div class="talk-page">
     <dl>
@@ -127,6 +151,7 @@ const leftBack = () => history.back();
         v-for="(item, index) in state.list"
         :key="index"
         :class="item.receive_id == receiveId ? 'active' : ''"
+        ref="chat"
       >
         <h5>{{ item.create_time }}</h5>
         <div>
@@ -158,11 +183,15 @@ const leftBack = () => history.back();
 </template>
 
 <style scoped lang="scss">
+.task-top {
+  background: #f3f3f3;
+  height: 2.7rem;
+}
 .talk-page {
   width: 99%;
   background: #f3f3f3;
-  margin-top: 2.8rem;
-  padding-bottom: 1rem;
+  min-height: calc(100vh - 46px);
+  margin-bottom: 1rem;
 
   dl {
     padding: 0.96rem 0.64rem;

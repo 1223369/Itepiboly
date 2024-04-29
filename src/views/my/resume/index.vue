@@ -20,7 +20,7 @@ const leftBack = () => history.back();
 
 <template>
   <div class="resume">
-    <van-loading v-if="store.loading" size="24px" vertical>加载中...</van-loading>
+    <!-- <van-loading v-if="store.loading" size="24px" vertical>加载中...</van-loading> -->
     <div v-if="!store.loading">
       <van-nav-bar fixed title="我的简历" left-arrow @click-left="leftBack" />
       <PersonInfo :item="store.resumeInfo"></PersonInfo>

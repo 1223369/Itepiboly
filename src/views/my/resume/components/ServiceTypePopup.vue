@@ -7,11 +7,7 @@ const state = ref({
   value: [], // 服务方式
 });
 
-const props = defiendProps({
-  page: {
-    type: string,
-  }
-})
+
 
 const { closeServiceType } = inject("popup");
 </script>
