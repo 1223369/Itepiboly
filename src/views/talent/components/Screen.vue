@@ -1,46 +1,54 @@
 <script setup lang="ts">
 import { inject, reactive } from "vue";
-import { screenList } from "@/api/task";
-import { taskStore } from "@/store/task";
+import { getScreenl } from "@/api/talent";
+import { talenetStore } from "@/store/talent";
 import { showToast } from "vant";
 
-const store = taskStore();
+const store = talenetStore();
 // 获取父组件传递的方法
 const { closeScreen } = inject("popup");
 
 const state = reactive({
-  // 职位类型默认值
-  mode: '',
-  cycle: ''
+  highest: '', // 最高学历
+  salary: '', // 薪资待遇
+  experience: '', // 经验要求
 });
 
 // 获取筛选数据
 const getScreenList = async () => {
-  const res = await screenList();
+  const res = await getScreenl();
   if (res) {
-    store.setScreenList(res.data);
+    store.setScreen(res.data);
   } else {
-    showToast(res?.msg);
+    showToast(res.msg);
   }
 };
-if (!store.screenList.serviceMode) getScreenList();
 
-// 服务方式点击事件
-const modeChange = (name: string) => {
-  state.mode = name;
+// 最高学历点击事件
+const highestChange = (name: string) => {
+  state.highest = name;
 }
-// 服务周期点击事件
-const cycleChange = (name: string) => {
-  state.cycle = name;
+// 薪资待遇点击事件
+const salaryChange = (name: string) => {
+  state.salary = name;
+}
+// 经验要求点击事件
+const experienceChange = (name: string) => {
+  state.experience = name;
 }
 
 // 清除筛选
 const clearScreen = () => {
-  state.mode = '';
-  state.cycle = ''; 
+  state.highest = '';
+  state.salary = ''; 
+  state.experience = '';
 }
 
 const leftBack = () => closeScreen(); 
+
+
+// 函数调用
+if (!store.highestList.length) getScreenList();
 </script>
 
 <template>
@@ -52,13 +60,17 @@ const leftBack = () => closeScreen();
 
   <!-- 职位类型 -->
   <div class="task-screen">
-    <h3>服务方式</h3>
+    <h3>学历要求</h3>
     <div class="screen-item">
-      <span :class="{active: state.mode === item}" v-for="(item, index) in store.screenList.serviceMode" :key="index" @click="modeChange(item)">{{ item }}</span>
+      <span :class="{active: state.highest === item}" v-for="(item, index) in store.highestList" :key="index" @click="highestChange(item)">{{ item.value }}</span>
     </div>
-    <h3>任务周期</h3>
+    <h3>薪资待遇</h3>
     <div class="screen-item">
-      <span :class="{active: state.cycle === item}" v-for="(item, index) in store.screenList.taskCycle" :key="index" @click="cycleChange(item)">{{ item }}</span>
+      <span :class="{active: state.salary === item}" v-for="(item, index) in store.salaryList" :key="index" @click="salaryChange(item)">{{ item }}</span>
+    </div>
+    <h3>经验要求</h3>
+    <div class="screen-item">
+      <span :class="{active: state.experience === item}" v-for="(item, index) in store.experienceList" :key="index" @click="experienceChange(item)">{{ item.value }}</span>
     </div>
     <div class="screen-footer">
       <button class="screen-clear" @click="clearScreen">清除</button>
@@ -115,7 +127,7 @@ const leftBack = () => closeScreen();
     width: calc(100vw - 1.40rem);
 
     .screen-clear {
-      width: 5.33rem;
+      width: 20%;
       height: 2.35rem;
       background: #f5f6f8;
       border-radius: 0.27rem;
@@ -123,7 +135,7 @@ const leftBack = () => closeScreen();
       font-size: 0.8rem;
       font-weight: bold;
       color: #666565;
-      margin-right: 0.64rem;
+      margin: 0.2rem 1rem 0 0;
     }
   }
 }
