@@ -7,9 +7,10 @@ import Banner from "../task/components/Banner.vue";
 import CitySwitch from "../task/components/CitySwitch.vue";
 import PositionType from "../task/components/PositionType.vue";
 import Screen from "./components/Screen.vue";
-import { taskAllList } from "@/api/task";
+import { getTalent } from "@/api/talent";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import { nextTick } from "process";
+import { showToast } from "vant";
 
 const router = useRouter();
 const store = taskStore();
@@ -18,13 +19,13 @@ const state = reactive({
   citySwitchBool: false,
   PositionTypeBool: false,
   screenBool: false,
-  // 当前职位类型
-  positionType: "",
-  // 服务模式
-  serviceMode: "",
-  // 服务周期
-  serviceCycle: "",
-  // 人才列表
+  // 学历
+  highest: "",
+  // 薪资待遇
+  salary: "",
+  // 工作经验
+  experience: "",
+  // 人才类型
   talentList: [],
   // 当前页数
   pageNum: 1,
@@ -81,33 +82,36 @@ const closePositionType = (name: string) => {
 // 关闭筛选弹窗
 const closeScreen = (obj: string) => {
   if (obj) {
-    state.serviceMode = obj.mode;
-    state.serviceCycle = obj.cycle;
+    state.highest = obj.highest;
+    state.salary = obj.salary;
+    state.experience = obj.experience;
     onRefresh();
   }
 
   state.screenBool = false;
 };
 
-// 获取任务列表数据
-const getTaskAllList = async () => {
+// 获取人才列表数据
+const getTalentList = async () => {
   state.loading = true;
 
-  if (state.pageNum === 1) state.taskList = [];
+  if (state.pageNum === 1) state.talentList = [];
 
-  const res = await taskAllList({
-    position_name: state.positionValue,
-    service_mode: state.serviceMode,
-    task_cycle: state.taskCycle,
-    pageNum: state.pageNum,
-    pageSize: state.pageSize,
-    city: store.cityValue,
+  const res = await getTalent({
+    "position_name": state.positionValue,
+    "highest_education": state.highest,
+    "service_price": state.salary,
+    "job_experience": state.experience,
+    "pageNum": state.pageNum,
+    "pageSize": state.pageSize,
+    "city": store.cityValue,
+    "it_enterprise": 1,
   });
   if (res) {
-    state.taskList = state.taskList.concat(res.records);
+    state.talentList = state.talentList.concat(res.records);
     state.loading = false;
 
-    if (state.taskList.length >= res.total) {
+    if (state.talentList.length >= res.total) {
       state.finished = true;
     } else {
       state.finished = false;
@@ -121,13 +125,13 @@ const getTaskAllList = async () => {
 // 当任务列表滚动到底部时，加载更多数据
 const onLoad = () => {
   state.pageNum++;
-  getTaskAllList();
+  getTalentList();
 };
 
 // 下拉刷新
 const onRefresh = () => {
   state.pageNum = 1;
-  getTaskAllList();
+  getTalentList();
 };
 
 // 跳转搜索页面
@@ -143,7 +147,7 @@ provide("popup", {
 });
 
 // 调用函数
-getTaskAllList();
+getTalentList();
 </script>
 
 <template>
@@ -180,7 +184,7 @@ getTaskAllList();
       </div>
     </div>
 
-    <!-- 任务列表 -->
+    <!-- 人才列表 -->
     <van-pull-refresh
       class="task-list"
       v-model="state.loading"
@@ -198,7 +202,7 @@ getTaskAllList();
         <!-- 暂无数据显示 -->
         <div
           class="wy-no-data"
-          v-if="!state.loading && state.taskList.length === 0"
+          v-if="!state.loading && state.talentList.length === 0"
         >
           暂无数据
         </div>

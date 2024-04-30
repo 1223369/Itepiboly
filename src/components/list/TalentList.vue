@@ -9,11 +9,22 @@ const props = defineProps({
     default: () => [],
   },
 });
-console.log('props', props)
+console.log("props", props);
 //跳转对应页面
 const gotoDetail = (id: number) => {
-  
-  router.push("/talent/details" + id);
+  router.push("/talent/details/" + id);
+};
+
+// 字符串转数组
+const arrayList = (str: string) => {
+  if (str) {
+    const array =  str.split(",");
+    return array.map((item, index) => {
+      return { id: index + 1, value: item }; // 添加一个带有唯一id的对象
+    });
+  } else {
+    return [];
+  }
 };
 </script>
 
@@ -28,24 +39,27 @@ const gotoDetail = (id: number) => {
     <div class="talent-item-top">
       <!-- 左边头像 -->
       <div class="talent-item-pic">
-        <img src="@/assets/img/icon/icon-message.png" alt="" />
+        <img :src="item.it_head" alt="" />
       </div>
       <!-- 右边信息 -->
       <div class="talent-item-cont">
-        <h3>李想 <span>驻场</span><span>远程</span><span>全职</span></h3>
-        <p>前端工程师 | 5年 | 本科 | 23岁</p>
+        <h3>
+          {{ item.user_name }}<span  v-for="child in arrayList(item.service_mode)" :key="child.id">{{ child.value }}</span>
+        </h3>
+        <p>
+          {{ item.position_name }} ｜ {{ item.work_year }} ｜
+          {{ item.highest_education }} ｜ {{ item.age }}
+        </p>
         <dl>
-          <dt>vue</dt>
-          <dt>react</dt>
-          <dt>springBoot</dt>
+          <dt v-for="child in arrayList(item.skill_ids)" :key="child.id">{{ child.value }}</dt>
         </dl>
       </div>
     </div>
 
     <!-- 人才已做项目及地址 -->
     <div class="talent-item-bottom">
-      <label for="">已做两个项目</label>
-      <span><van-icon name="location-o" />北京</span>
+      <label for="">已做{{ item.project_count }}项目</label>
+      <span><van-icon name="location-o" />{{ item.city }}</span>
     </div>
   </div>
 </template>
