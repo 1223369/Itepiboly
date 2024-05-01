@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { inject, reactive } from "vue";
 import { getScreenl } from "@/api/talent";
-import { talenetStore } from "@/store/talent";
+import { talentStore } from "@/store/talent";
 import { showToast } from "vant";
 
-const store = talenetStore();
+const store = talentStore();
 // 获取父组件传递的方法
 const { closeScreen } = inject("popup");
 

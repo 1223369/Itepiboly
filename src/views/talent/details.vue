@@ -74,7 +74,7 @@ getTalentDetailList();
   <van-nav-bar fixed title="人才详情" left-arrow @click-left="leftBack" />
 
   <!--  -->
-  <div class="detail-page">
+  <div class="detail-page" v-if="state.item.id">
     <TalentInfo :item="state.item"></TalentInfo>
     <WorkExperience :companyList="state.companyList"></WorkExperience>
     <ProjectExperience :projectList="state.projectList"></ProjectExperience>

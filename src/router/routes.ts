@@ -1,3 +1,4 @@
+import { KeepAlive } from "vue";
 import { RouteRecordRaw } from "vue-router";
 
 export const constantRoute: Array<RouteRecordRaw> = [
@@ -18,7 +19,7 @@ export const constantRoute: Array<RouteRecordRaw> = [
     path: "/task",
     component: () => import("@/views/task/index.vue"),
     meta: {
-      keepAlive: true, //设置页面是否需要使用缓存
+      KeepAlive: true, //设置页面是否需要使用缓存
     },
   },
   {
@@ -151,15 +152,23 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/my/partner/company.vue"),
   },
   {
+    name: "talent",
     path: "/talent",
     component: () => import("@/views/talent/index.vue"),
     meta: {
-      requireAuth: true, // 需要用户权限
-      roles: ["2"], // 访问该路由需要的权限
+      KeepAlive: true, //设置页面是否需要使用缓存
     },
   },
   {
     path: "/talent/details/:id",
     component: () => import("@/views/talent/details.vue"),
+  },
+  {
+    name: "talentSearch",
+    path: "/talent/search",
+    component: () => import("@/views/talent/search.vue"),
+    meta: {
+      KeepAlive: true, // 设置页面是否需要使用缓存
+    },
   },
 ];

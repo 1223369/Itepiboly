@@ -57,6 +57,7 @@ onActivated(() => {
 
 //记录滚动位置
 onBeforeRouteLeave((to, from, next) => {
+  console.log('222', 222)
   let taskScroll =
     document.documentElement.scrollTop || document.body.scrollTop;
   store.setTaskScroll(taskScroll);
@@ -136,7 +137,7 @@ const onRefresh = () => {
 
 // 跳转搜索页面
 const gotoSearch = () => {
-  router.push("/task/search");
+  router.push("/talent/search");
 };
 
 // 向子组件传递方法

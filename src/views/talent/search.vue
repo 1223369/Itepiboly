@@ -1,23 +1,24 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { showToast } from "vant";
-import TaskList from "@/components/list/TaskList.vue";
-import { hotSearch, taskAllList } from "@/api/task";
-import { taskStore } from "@/store/task";
+import TalentList from "@/components/list/TalentList.vue";
+import { hotSearch } from "@/api/task";
+import { getTalent } from "@/api/talent";
+import { talentStore } from "@/store/talent";
 import { onBeforeRouteLeave } from "vue-router";
 import { onActivated } from "vue";
 import { nextTick } from "process";
 
-const store = taskStore();
-const his = localStorage.getItem("searchHistory");
+const store = talentStore();
+const his = localStorage.getItem("searchTalent");
 const state = reactive({
   // 输入框搜索值
   value: "",
   loading: false,
-  // 人物列表
-  taskList: [],
+  // 人才列表
+  list: [],
   // 搜索历史
-  searchHistory: his ? his.split(",") : [],
+  searchTalent: his ? his.split(",") : [],
   // 当前页数
   pageNum: 1,
   // 每页数据
@@ -31,7 +32,7 @@ const state = reactive({
 // 获取热门搜索
 const getHotSearch = async () => {
   const res = await hotSearch({
-    type: 1,
+    type: 0,
   });
 
   if (res) {
@@ -45,18 +46,18 @@ const getHotSearch = async () => {
 const getTaskAllList = async () => {
   state.loading = true;
 
-  if (state.pageNum === 1) state.taskList = [];
+  if (state.pageNum === 1) state.list = [];
 
-  const res = await taskAllList({
+  const res = await getTalent({
     position_name: state.value,
     pageNum: state.pageNum,
     pageSize: state.pageSize,
   });
   if (res) {
-    state.taskList = state.taskList.concat(res.records);
+    state.list = state.list.concat(res.records);
     state.loading = false;
 
-    if (state.taskList.length >= res.total) {
+    if (state.list.length >= res.total) {
       state.finished = true;
     } else {
       state.finished = false;
@@ -71,9 +72,9 @@ const getTaskAllList = async () => {
 const onSearch = (value: string) => {
   if (!value) return;
   // 历史记录重复处理
-  if (!state.searchHistory.includes(value)) {
-    state.searchHistory.push(value);
-    localStorage.setItem("searchHistory", state.searchHistory as any);
+  if (!state.searchTalent.includes(value)) {
+    state.searchTalent.push(value);
+    localStorage.setItem("searchTalent", state.searchTalent as any);
   }
   state.searchFlag = true;
   getTaskAllList();
@@ -94,8 +95,8 @@ const onCancel = () => {
 
 // 清空历史记录
 const clearHistory = () => {
-  state.searchHistory = [];
-  localStorage.removeItem("searchHistory");
+  state.searchTalent = [];
+  localStorage.removeItem("searchTalent");
 };
 
 // 当任务列表滚动到底部时，加载更多数据
@@ -125,12 +126,12 @@ onActivated(() => {
 //记录滚动位置
 onBeforeRouteLeave((to, from, next) => {
   let searchScroll =
-    document.documentElement.scrollTop || document.body.scrollTop;
-  store.setSearchScrolll(searchScroll);
+      document.documentElement.scrollTop || document.body.scrollTop;
+    store.setSearchScrolll(searchScroll);
   next();
 });
 
-const leftBack = () => history?.back();
+const leftBack = () => history.back();
 
 // 执行函数
 if (store.hotSearchList.length === 0) getHotSearch();
@@ -155,7 +156,7 @@ if (store.hotSearchList.length === 0) getHotSearch();
 
         <dl>
           <dt
-            v-for="(item, index) in state.searchHistory"
+            v-for="(item, index) in state.searchTalent"
             :key="index"
             @click="gotoSearch(item)"
           >
@@ -187,12 +188,12 @@ if (store.hotSearchList.length === 0) getHotSearch();
             finished-text="没有更多了"
             @load="onLoad"
           >
-            <TaskList :taskList="state.taskList"></TaskList>
+            <TalentList :talentList="state.list"></TalentList>
 
             <!-- 暂无数据显示 -->
             <div
               class="wy-no-data"
-              v-show="!state.loading && state.taskList.length === 0"
+              v-show="!state.loading && state.list.length === 0"
             >
               暂无数据
             </div>
@@ -245,20 +246,20 @@ if (store.hotSearchList.length === 0) getHotSearch();
     }
   }
 
-  dl {
+  dl{
     min-height: 1rem;
     dt {
-      background: #f5f5f5;
-      border-radius: 0.16rem;
-      padding: 0.45rem;
-      font-size: 0.64rem;
-      line-height: 0.64rem;
-      font-weight: 400;
-      color: #333333;
-      margin-right: 0.51rem;
-      margin-bottom: 0.53rem;
-      display: inline-block;
-    }
+    background: #f5f5f5;
+    border-radius: 0.16rem;
+    padding: 0.45rem;
+    font-size: 0.64rem;
+    line-height: 0.64rem;
+    font-weight: 400;
+    color: #333333;
+    margin-right: 0.51rem;
+    margin-bottom: 0.53rem;
+    display: inline-block;
   }
+  } 
 }
 </style>
