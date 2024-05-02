@@ -1,4 +1,3 @@
-import { KeepAlive } from "vue";
 import { RouteRecordRaw } from "vue-router";
 
 export const constantRoute: Array<RouteRecordRaw> = [
@@ -70,6 +69,10 @@ export const constantRoute: Array<RouteRecordRaw> = [
   {
     path: "/message/talk/:taskId/:userId",
     component: () => import("@/views/message/talk.vue"),
+  },
+  {
+    path: "/message/talent/:resumeId/:userId",
+    component: () => import("@/views/message/talent.vue"),
   },
   {
     path: "/my",
@@ -156,7 +159,9 @@ export const constantRoute: Array<RouteRecordRaw> = [
     path: "/talent",
     component: () => import("@/views/talent/index.vue"),
     meta: {
-      KeepAlive: true, //设置页面是否需要使用缓存
+      KeepAlive: true, // 设置页面是否需要使用缓存
+      requireAuth: true, // 需要用户权限
+      roles: ["2"], // 访问该路由需要的权限
     },
   },
   {

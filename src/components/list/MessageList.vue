@@ -18,38 +18,51 @@ const props = defineProps({
 const gotoDetail = (item: any) => {
   if (props.type === "system") {
     router.push("/message/systemList");
-  } else if (props.type === "talk") {
+  }
+  if (props.type === "talk" && item.things_type === 0) {
+    // 人才端对话,我方发出
     router.push("/message/talk/" + item.things_id + "/" + item.send_id);
+  } 
+  if (props.type === "talk" && item.things_type === 1) {
+    // 人才端对话,对方发出
+    router.push("/message/talk/" + item.things_id + "/" + item.receive_id);
+  } 
+  if (props.type === "talent" && item.things_type === 0) {
+    // 企业端对话,我方发出
+    router.push("/message/talent/" + item.things_id + "/" + item.send_id);
+  }
+  if (props.type === "talent" && item.things_type === 1) {
+    // 企业端对话,对方发出
+    router.push("/message/talent/" + item.things_id + "/" + item.receive_id);
   }
 };
 </script>
 
 <template>
-    <dl
-      v-for="(item, index) in messageList"
-      :key="index"
-      @click="gotoDetail(item as any)"
-    >
-      <!-- 头像姓名 -->
-      <dd>
-        <img v-if="item.receive_is_read" :src="item.receive_is_read" />
-        <img v-else src="@/assets/img/icon/icon-message.png" />
-        <span v-if="item.is_show"></span>
-      </dd>
+  <dl
+    v-for="(item, index) in messageList"
+    :key="index"
+    @click="gotoDetail(item as any)"
+  >
+    <!-- 头像姓名 -->
+    <dd>
+      <img v-if="item.receive_is_read" :src="item.receive_is_read" />
+      <img v-else src="@/assets/img/icon/icon-message.png" />
+      <span v-if="item.is_show"></span>
+    </dd>
 
-      <!-- 消息内容 -->
-      <dt>
-        <h3>
-          {{ item.title }}
-          <span>{{ item.create_time }}</span>
-        </h3>
-        <p>{{ item.content }}</p>
-      </dt>
-    </dl>
+    <!-- 消息内容 -->
+    <dt>
+      <h3>
+        {{item.things_type === 1 ? item.receive_id_name :  item.title  }}
+        <span>{{ item.create_time }}</span>
+      </h3>
+      <p>{{ item.content }}</p>
+    </dt>
+  </dl>
 </template>
 
 <style scoped lang="scss">
-
 dl {
   font-size: 0.64rem;
   color: #666666;

@@ -157,7 +157,7 @@ if (store.hotSearchList.length === 0) getHotSearch();
         <dl>
           <dt
             v-for="(item, index) in state.searchTalent"
-            :key="index"
+            :key="index"  
             @click="gotoSearch(item)"
           >
             {{ item }}
