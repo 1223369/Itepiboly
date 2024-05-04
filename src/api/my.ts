@@ -30,12 +30,23 @@ export function userModify(data: any) {
   });
 }
 
-// 获取我的收藏接口
+// 人才端获取我的收藏接口（任务）
 export function collectList() {
   return request({
     url: "/task/getTaskCollection",
     method: "GET",
     params: {},
+  });
+}
+
+// 企业端获取我的收藏接口（人才）
+export function talentCollectList() {
+  return request({
+    url: "/collect/resume/list",
+    method: "GET",
+    params: {
+      type: 1,
+    },
   });
 }
 
@@ -221,5 +232,14 @@ export function addPartnerPerson(data: any) {
     url: "/settlein/itEnterprise/add",
     method: "POST",
     data,
+  });
+}
+
+// 企业端任务、合约、体验金数据接口
+export function myAllCount() {
+  return request({
+    url: "/my/all/count",
+    method: "GET",
+    params: {},
   });
 }

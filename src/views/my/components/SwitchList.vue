@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { myStore } from "@/store/my";
+import { userStore } from "@/store/user";
 import { addRole } from "@/api/my"; 
 import { showToast } from "vant";
 import IdentityPopup from './IdentityPopup.vue'
@@ -62,6 +63,7 @@ const setRole = async (role: number) => {
     if (res) {
       showToast("身份切换成功");
       store.getUserInfo();
+      userStore().setRole(role);
     }
   } else {
     state.role = role;

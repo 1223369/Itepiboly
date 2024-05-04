@@ -12,7 +12,7 @@ const state = ref({
   idCardBack: "", // 身份证背面照片
 });
 
-// TODO: 保存实名认证信息 
+// TODO: 保存实名认证信息
 const submit = async () => {
   if (!state.value.name) {
     showToast("请输入您的真实姓名");

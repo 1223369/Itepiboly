@@ -9,7 +9,6 @@ const props = defineProps({
     default: () => [],
   },
 });
-console.log("props", props);
 //跳转对应页面
 const gotoDetail = (id: number) => {
   router.push("/talent/details/" + id);
@@ -33,7 +32,7 @@ const arrayList = (str: string) => {
     class="talent-item"
     v-for="(item, index) in talentList"
     :key="index"
-    @click="gotoDetail((item as any).id)"
+    @click="gotoDetail((item as any).resume_id || (item as any).id)"
   >
     <!-- 人才信息 -->
     <div class="talent-item-top">

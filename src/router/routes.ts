@@ -87,6 +87,14 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/my/user/authReal.vue"),
   },
   {
+    path: "/my/company/certified",
+    component: () => import("@/views/my/user/certified.vue"),
+  },
+  {
+    path: "/my/company/authReal",
+    component: () => import("@/views/my/user/authReal.vue"),
+  },
+  {
     path: "/my/user/certified",
     component: () => import("@/views/my/user/certified.vue"),
   },
@@ -139,6 +147,10 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/my/collect/index.vue"),
   },
   {
+    path: "/my/collect/talent",
+    component: () => import("@/views/my/collect/talent.vue"),
+  },
+  {
     path: "/my/partner/person",
     component: () => import("@/views/my/partner/person.vue"),
   },
@@ -153,6 +165,14 @@ export const constantRoute: Array<RouteRecordRaw> = [
   {
     path: "/my/partner/company",
     component: () => import("@/views/my/partner/company.vue"),
+  },
+  {
+    path: "/my/task",
+    component: () => import("@/views/my/task/index.vue"),
+  },
+  {
+    path: "/my/coupon",
+    component: () => import("@/views/my/coupon/index.vue"),
   },
   {
     name: "talent",

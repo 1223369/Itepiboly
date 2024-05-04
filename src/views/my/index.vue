@@ -3,21 +3,34 @@ import FooterTabbar from "@/components/FooterTabbar.vue";
 import { myStore } from "@/store/my";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import CustomerManager from './components/CustomerManager.vue'
-
+import CustomerManager from "./components/CustomerManager.vue";
+import { myAllCount } from '@/api/my'
+ 
 const store = myStore();
 const router = useRouter();
-if (!store.userInfo.user_name) store.getUserInfo()
 
 const state = ref({
-    show: false, // 专属客户经理弹窗显示状态
-    count: {}
-  })
+  show: false, // 专属客户经理弹窗显示状态
+  count: {},
+});
 
+// 获取企业端任务、合约、体验金数据
+const getMyAllCount = async() => {
+  const res = await myAllCount()
+  if (res) {
+    state.value.count = res[0]
+  }
+}
 
 const gotoPage = (path: string) => {
   router.push(path);
 };
+
+if (!store.userInfo.user_name) {
+  store.getUserInfo();
+  getMyAllCount()
+}
+
 </script>
 
 <template>
@@ -34,13 +47,21 @@ const gotoPage = (path: string) => {
       <img v-else src="@/assets/img/icon/icon-message.png" />
       <div @click="gotoPage('/my/user')">
         <h3>{{ store.userInfo.user_name }}<span></span></h3>
-        <p>{{store.userInfo.role===1?'IT企业人才':store.userInfo.role===3?'企业端':'管理端'}}</p>
+        <p>
+          {{
+            store.userInfo.role === 1
+              ? "IT企业人才"
+              : store.userInfo.role === 3
+              ? "企业端"
+              : "管理端"
+          }}
+        </p>
       </div>
-      <i @click="gotoPage('/my/account') "></i>
+      <i @click="gotoPage('/my/account')"></i>
     </div>
 
-    <!-- 我的收藏部分 -->
-    <div class="my-type">
+    <!-- 人才端我的收藏部分 -->
+    <div class="my-type" v-if="store.userInfo.role === 1">
       <router-link to="/my/collect">
         <img src="@/assets/img/my/icon-my-collection.png" alt="" />
         <span>我的收藏</span>
@@ -52,16 +73,46 @@ const gotoPage = (path: string) => {
       </router-link>
     </div>
 
-    <!-- 我的合约部分 -->
+    <!-- 企业端我的收藏部分 -->
+    <div class="my-type-enterprise" v-if="store.userInfo.role === 3">
+      <router-link to="/my/collect/talent">
+        <img src="@/assets/img/my/icon-collection.png" />
+        <span>我的收藏</span>
+      </router-link>
+      <router-link to="/my/task">
+        <i>{{ state.count.task_count }}</i>
+        <img src="@/assets/img/my/icon-task-management.png" />
+        <span>任务管理</span>
+      </router-link>
+      <router-link to="/my/contract">
+        <i>{{ state.count.contract_count }}</i>
+        <img src="@/assets/img/my/icon-contract-management.png" />
+        <span>合约管理</span>
+      </router-link>
+      <router-link to="/my/coupon">
+        <i>{{ state.count.coupon_count }}</i>
+        <img src="@/assets/img/my/icon-experience-gold.png" />
+        <span>我的体验金</span>
+      </router-link>
+    </div>
+
+    <!-- 人才端以及企业端我的合约部分 -->
     <div class="my-contract">
       <div class="my-title">
         <h3>我的合约</h3>
-        <span @click="gotoPage('/my/contract/0')">查看全部合约<van-icon name="arrow" /></span>
+        <span @click="gotoPage('/my/contract/0')"
+          >查看全部合约<van-icon name="arrow"
+        /></span>
       </div>
       <div class="my-contract-cur">
+        <span
+          @click="gotoPage('/my/contract/2')"
+          v-if="store.userInfo.role === 3"
+          ><img src="@/assets/img/my/contract-be-send.png" />待发送</span
+        >
         <span @click="gotoPage('/my/contract/2')">
           <img src="@/assets/img/my/contract-be-signed.png" alt="" />
-          <p>待签约</p>
+          <p>{{ store.userInfo.role === 1 ? "待签约" : "待确认" }}</p>
         </span>
         <span @click="gotoPage('/my/contract/3')">
           <img src="@/assets/img/my/contract-in-performance.png" alt="" />
@@ -73,7 +124,7 @@ const gotoPage = (path: string) => {
         </span>
         <span @click="gotoPage('/my/contract/5')">
           <img src="@/assets/img/my/contract-canceled.png" alt="" />
-          <p>已取消</p>
+          <p>{{ store.userInfo.role === 1 ? "已取消" : "已失效" }}</p>
         </span>
       </div>
     </div>
@@ -83,10 +134,34 @@ const gotoPage = (path: string) => {
       <div class="my-title">
         <h3>常用功能</h3>
       </div>
-      <div class="my-item" @click="gotoPage(store.userInfo.user_is_check === 1?'/my/user/certified':'/my/user/authReal')">
+      <div
+        class="my-item"
+        @click="
+          gotoPage(
+            store.userInfo.user_is_check === 1
+              ? '/my/user/certified'
+              : '/my/user/authReal'
+          )
+        "
+      >
         <img src="@/assets/img/my/icon-real-name-auth.png" alt="" />
         <label for="">实名认证</label>
         <span><van-icon name="arrow"></van-icon></span>
+      </div>
+      <div
+        class="my-item"
+        @click="
+          gotoPage(
+            store.userInfo.company_id === 1
+              ? '/my/company/certified'
+              : '/my/company/authReal'
+          )
+        "
+        v-if="store.userInfo.role === 3"
+      >
+        <img src="@/assets/img/my/icon-company-auth.png" />
+        <label>企业认证</label>
+        <span><van-icon name="arrow" /></span>
       </div>
       <div class="my-item" @click="state.show = true">
         <img src="@/assets/img/my/icon-account-manager.png" alt="" />
@@ -111,19 +186,36 @@ const gotoPage = (path: string) => {
       </div>
     </div>
     <div class="my-common">
-      
       <div class="my-item" @click="gotoPage('/my/user/identitySwitch')">
         <img src="@/assets/img/my/icon-switch-role.png" alt="" />
         <label for="">切换身份</label>
-        <span>当前为{{store.userInfo.role===1?'IT企业人才':store.userInfo.role===3?'企业端':'管理端'}}身份<van-icon name="arrow"></van-icon></span>
+        <span
+          >当前为{{
+            store.userInfo.role === 1
+              ? "IT企业人才"
+              : store.userInfo.role === 3
+              ? "企业端"
+              : "管理端"
+          }}身份<van-icon name="arrow"></van-icon
+        ></span>
       </div>
     </div>
 
     <!-- 专属客户经理弹窗 -->
-    <van-popup v-model:show="state.show" duration="0" :style="{ width: '13.07rem',height: '15.44rem',borderRadius:'0.53rem' }">
-      <CustomerManager @back="state.show = false" :item="store.userInfo"></CustomerManager>
+    <van-popup
+      v-model:show="state.show"
+      duration="0"
+      :style="{
+        width: '13.07rem',
+        height: '15.44rem',
+        borderRadius: '0.53rem',
+      }"
+    >
+      <CustomerManager
+        @back="state.show = false"
+        :item="store.userInfo"
+      ></CustomerManager>
     </van-popup>
-
   </div>
   <FooterTabbar></FooterTabbar>
 </template>
@@ -204,7 +296,7 @@ const gotoPage = (path: string) => {
     }
   }
 
-  // 我的收藏部分
+  // 人才端我的收藏部分
   .my-type {
     display: flex;
     align-items: center;
@@ -235,6 +327,52 @@ const gotoPage = (path: string) => {
         line-height: 0.69rem;
         font-weight: 400;
         color: #666666;
+      }
+    }
+  }
+
+  // 企业端我的收藏部分
+  .my-type-enterprise {
+    display: flex;
+    width: 21.95rem;
+    height: 5.27rem;
+    border-radius: 0.27rem;
+    background: #ffffff;
+    margin-bottom: 0.59rem;
+
+    a {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      img {
+        width: 2.45rem;
+        height: 2.45rem;
+        margin-bottom: 0.64rem;
+      }
+
+      span {
+        font-size: 0.64rem;
+        color: #333333;
+      }
+
+      i {
+        position: absolute;
+        font-style: normal;
+        font-size: 0.59rem;
+        color: #ffffff;
+        width: 0.85rem;
+        height: 0.85rem;
+        background: #fc9215;
+        border: 1px solid #ffffff;
+        border-radius: 50%;
+        text-align: center;
+        left: 50%;
+        margin-left: 0.4rem;
+        top: 0.6rem;
       }
     }
   }
