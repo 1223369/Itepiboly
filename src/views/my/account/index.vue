@@ -3,6 +3,15 @@ import { ref } from "vue";
 import AccountInfo from "../components/AccountInfo.vue";
 import AccountList from "../components/AccountList.vue";
 import { transferList, incomeList } from "@/api/my";
+import { myStore } from "@/store/my";
+
+const store = myStore();
+
+const state = ref({
+  check: 0,
+  loading: false,
+  list: [], // 余额操作列表
+});
 
 // tab标题
 const tabs = [
@@ -20,27 +29,47 @@ const tabs = [
   },
 ];
 
-const state = ref({
-  check: 0,
-  loading: false,
-  list: [], // 余额操作列表
-});
+// 企业端添加支出选项
+if (store.userInfo.role === 3) {
+  tabs.splice(2, 0, {
+    type: 3,
+    text: "支出",
+  });
+}
 
 // 切换tab
-const toCheck = async(type: number) => {
-  state.value.check = type;
+const toCheck = async (index: number, type: any) => {
+  state.value.check = index;
   state.value.list = [];
   if (type === 0) {
     await getTransferList();
-    await getIncomeList();
+    await getIncomeList({
+      type: 1,
+    });
+
+    // 企业端获取支出列表
+    if (store.userInfo.role === 3) {
+      await getIncomeList({
+        type: 2,
+      });
+    }
+
     state.value.list = state.value.list.flat(2);
   }
   if (type === 1) {
-    await getIncomeList();
+    await getIncomeList({
+      type: 1,
+    });
     state.value.list = state.value.list.flat(2);
   }
   if (type === 2) {
     await getTransferList();
+    state.value.list = state.value.list.flat(2);
+  }
+  if (type === 3) {
+    await getIncomeList({
+      type: 2,
+    });
     state.value.list = state.value.list.flat(2);
   }
 };
@@ -55,9 +84,10 @@ const getTransferList = async () => {
   state.value.loading = false;
 };
 // 获取收入列表数据
-const getIncomeList = async () => {
+const getIncomeList = async (data: any) => {
+  console.log("data", data);
   state.value.loading = true;
-  const res = await incomeList();
+  const res = await incomeList(data);
   if (res) {
     state.value.list.push(res);
   }
@@ -68,20 +98,19 @@ const getIncomeList = async () => {
 const leftBack = () => history.back();
 
 // 默认为全部（0）
-toCheck(0);
+toCheck(0,0);
 </script>
 
 <template>
   <van-nav-bar fixed title="我的账户" left-arrow @click-left="leftBack" />
   <AccountInfo></AccountInfo>
 
-
   <dl>
     <dt
       :class="state.check === item.type ? 'active' : ''"
       v-for="item in tabs"
       :key="item.type"
-      @click="toCheck(item.type)"
+      @click="toCheck(item.type, item.type)"
     >
       {{ item.text }}
     </dt>
