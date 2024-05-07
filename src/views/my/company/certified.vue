@@ -1,28 +1,48 @@
 <script setup lang="ts">
 import { myStore } from "@/store/my";
+import { ref } from "vue";
+import { companyDetail } from "@/api/my";
 
 const store = myStore();
 
+const state = ref({
+  detail: {},
+});
+
+// 获取企业认证详情
+const getCompanyDetail = async () => {
+  const res = await companyDetail();
+  if (res) {
+    state.value.detail = res.data;
+  }
+};
+
 // 返回上一页
 const gotoBack = () => history.back();
+
+// 方法调用
+getCompanyDetail();
 </script>
 
 <template>
   <van-icon class="back" name="arrow-left" @click="gotoBack" />
-  <img class="cert-pic" src="@/assets/img/my/auth-real-certified.png" />
-  <h5>已完成实名认证</h5>
+  <img class="cert-pic" src="@/assets/img/my/company-certified.png" />
+  <h5>已完成企业认证</h5>
   <van-field
-    :model-value="store.userInfo.real_name"
-    label="姓名"
+    :model-value="state.detail.company_name"
+    label="企业名称"
     readonly
-    placeholder="请输入您的真实姓名"
   />
   <van-field
-    :model-value="store.userInfo.idcard"
+    :model-value="state.detail.organization_code"
+    label="机构代码"
     readonly
-    label="证件号码"
-    placeholder="请输入您的证件号码"
   />
+  <van-field :model-value="state.detail.contacts" label="企业法人" readonly />
+  <van-field :model-value="state.detail.phone" label="联系电话" readonly />
+  <van-field label="企业营业执照" class="border-none" readonly />
+
+  <img class="cert-img" :src="state.detail.permit" />
 
   <div class="cert-bottom">
     <img src="@/assets/img/my/auth-real-safe.png" />
@@ -50,16 +70,26 @@ h5 {
   font-size: 1rem;
   color: #ffffff;
 }
+
+.border-none {
+  border: none;
+}
+
 .cert-pic {
   width: 100%;
 }
 
+.cert-img {
+  width: 7.57rem;
+  height: 5.17rem;
+  display: block;
+  margin: 2.45rem auto 1rem;
+}
+
 .cert-bottom {
   text-align: center;
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
   width: 100%;
+  margin-bottom: 1rem;
 
   img {
     width: 0.93rem;

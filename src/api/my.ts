@@ -261,3 +261,21 @@ export function addMycoupon(data: any) {
     data,
   });
 }
+
+// 企业端企业认证提交接口
+export function companyCertification(data: any) {
+  return request({
+    url: "/company/certification",
+    method: "PUT",
+    data,
+  });
+}
+
+// 企业端企业认证详情接口
+export function companyDetail() {
+  return request({
+    url: "/company/detail",
+    method: "GET",
+    params: {},
+  });
+}

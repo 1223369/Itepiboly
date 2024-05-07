@@ -1,82 +1,94 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { addAuthReal } from "@/api/my";
+import { companyCertification } from "@/api/my";
 import { showToast } from "vant";
-import UplodeImage from '../components/UploadImage.vue'
-
+import UplodeImage from "../components/UploadImage.vue";
 
 const state = ref({
-  name: "", // 姓名
-  number: "", // 证件号码
-  idCardJust: "", // 身份证正面照片
-  idCardBack: "", // 身份证背面照片
+  company_name: "", // 企业名称
+  organization_code: "", // 组织机构代码
+  contacts: "", // 企业法人
+  phone: "", // 电话号码
+  permit: "", // 营业执照
 });
 
 // TODO: 保存实名认证信息
 const submit = async () => {
-  if (!state.value.name) {
-    showToast("请输入您的真实姓名");
+  if (!state.value.company_name) {
+    showToast("请输入企业名称");
     return;
   }
-  if (!state.value.number) {
-    showToast("请输入您的证件号码");
+  if (!state.value.organization_code) {
+    showToast("请输入机构代码");
     return;
   }
-  if (!state.value.idCardJust && !state.value.idCardBack) {
-    showToast("请上传您的证件照片");
+  if (!state.value.contacts) {
+    showToast("请输企业法人");
+    return;
+  }
+  if (!state.value.phone) {
+    showToast("请输入联系电话");
+    return;
+  }
+  if (!state.value.permit) {
+    showToast("请上传营业执照");
     return;
   }
 
-
-  const res = await addAuthReal({
-    user_name: state.value.name,
-    cert_no: state.value.number,
-    idCard_just: state.value.idCardJust,
-    idCard_back: state.value.idCardBack,
+  const res = await companyCertification({
+    company_name: state.value.company_name,
+    organization_code: state.value.organization_code,
+    contacts: state.value.contacts,
+    phone: state.value.phone,
+    permit: state.value.permit,
   });
   if (res) {
     showToast(res.msg);
-    closeChange()
+    closeChange();
   } else {
     showToast(res.msg);
   }
-}
+};
 
 // 上传身份证正面照片
 const uploadJust = (file: File) => {
-  state.value.idCardJust = (file as any);
-}
-// 上传身份证背面照片
-const uploadBack = (file: File) => {
-  state.value.idCardBack = (file as any);
-}
+  state.value.permit = file as any;
+};
 
 // 返回上一页
 const closeChange = () => history.back();
-
 </script>
 
 <template>
-  <van-nav-bar title="实名认证" left-arrow @click-left="closeChange" />
+  <van-nav-bar title="企业认证" left-arrow @click-left="closeChange" />
   <h3>请如实填写信息，平台承诺保障客户的信息安全</h3>
   <van-field
-    v-model="state.name"
-    label="姓名"
-    placeholder="请输入您的真实姓名"
+    v-model="state.company_name"
+    label="企业名称"
+    placeholder="请输入企业名称"
   />
   <van-field
-    v-model="state.number"
-    label="证件号码"
-    placeholder="请输入您的证件号码"
+    v-model="state.organization_code"
+    label="机构代码"
+    placeholder="请输入统一社会信用码/工商执照注册号"
+  />
+  <van-field
+    v-model="state.contacts"
+    label="企业法人"
+    placeholder="请输入企业法人"
+  />
+  <van-field
+    v-model="state.phone"
+    label="联系电话"
+    placeholder="请输入联系电话"
   />
 
   <!-- TODO: 上传身份证照片 -->
   <div class="auth-pic">
-    <UplodeImage text="上传身份证正面照" @uploadChange="uploadJust"></UplodeImage>
-    <UplodeImage text="上传身份证反面照" @uploadChange="uploadBack"></UplodeImage>
+    <UplodeImage @uploadChange="uploadJust"></UplodeImage>
   </div>
-
-  <button class="wy-submit" @click="submit">提交实名认证</button>
+  <p>上传企业营业执照</p>
+  <button class="wy-submit" @click="submit">提交企业认证</button>
 </template>
 
 <style scoped lang="scss">
@@ -91,8 +103,27 @@ h3 {
   color: #ff9415;
 }
 .auth-pic {
+  width: 21.7rem;
+  height: 8.62rem;
+  background: #fffcf8;
+  border: 0.03px solid #fe9127;
+  border-radius: 0.27rem;
   display: flex;
   justify-content: space-around;
   margin-top: 1.09rem;
+  align-items: center;
+  margin: 1rem auto 0;
+
+  div {
+    display: flex;
+  }
+}
+
+p {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #666666;
+  margin-top: 1.6rem;
+  text-align: center;
 }
 </style>

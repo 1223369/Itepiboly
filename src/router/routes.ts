@@ -88,11 +88,11 @@ export const constantRoute: Array<RouteRecordRaw> = [
   },
   {
     path: "/my/company/certified",
-    component: () => import("@/views/my/user/certified.vue"),
+    component: () => import("@/views/my/company/certified.vue"),
   },
   {
     path: "/my/company/authReal",
-    component: () => import("@/views/my/user/authReal.vue"),
+    component: () => import("@/views/my/company/authReal.vue"),
   },
   {
     path: "/my/user/certified",

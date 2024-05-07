@@ -152,7 +152,7 @@ if (!store.userInfo.user_name) {
         class="my-item"
         @click="
           gotoPage(
-            store.userInfo.company_id === 1
+            store.userInfo.enterprise === 1
               ? '/my/company/certified'
               : '/my/company/authReal'
           )
