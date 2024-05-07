@@ -183,6 +183,10 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/my/coupon/index.vue"),
   },
   {
+    path: "/my/coupon/rule",
+    component: () => import("@/views/my/coupon/rule.vue"),
+  },
+  {
     name: "talent",
     path: "/talent",
     component: () => import("@/views/talent/index.vue"),

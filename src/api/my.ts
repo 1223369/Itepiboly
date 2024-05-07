@@ -243,3 +243,21 @@ export function myAllCount() {
     params: {},
   });
 }
+
+// 企业端我的体验金列表接口
+export function couponList() {
+  return request({
+    url: "/experience/getList",
+    method: "GET",
+    params: {},
+  });
+}
+
+// 企业端我的体验金领取接口
+export function addMycoupon(data: any) {
+  return request({
+    url: "/experience/addMyList",
+    method: "POST",
+    data,
+  });
+}
