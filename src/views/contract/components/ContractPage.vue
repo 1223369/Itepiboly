@@ -6,11 +6,21 @@ import { showToast } from "vant";
 import { contractStore } from "@/store/cotract";
 import { onBeforeRouteLeave } from "vue-router";
 import { onUpdated } from "vue";
+import { myStore } from "@/store/my";
+
+// 引入store
+const mStore = myStore();
+const store = contractStore();
+
+// 获取用户信息
+if (!mStore.userInfo.role) {
+  await mStore.getUserInfo()
+}
 
 const tabs = [
   {
     type: 2,
-    text: "待签约",
+    text: mStore.userInfo.role === 3 ? '待确认' : '待签约',
   },
   {
     type: 3,
@@ -25,7 +35,14 @@ const tabs = [
     text: "已失效",
   },
 ];
-
+// 企业端添加tabs数据
+if (mStore.userInfo.role === 3) {
+  tabs.unshift({
+    type: 1,
+    text: "待发送",
+  });
+}
+ 
 // 获取父组件传值
 const props = defineProps({
   type: {
@@ -41,8 +58,6 @@ if (props.type === "0") {
   });
 }
 
-// 引入store
-const store = contractStore();
 
 const state = reactive({
   type: props.type || tabs[0].type,
@@ -154,6 +169,7 @@ getContractList();
 }
 
 .contract-tab {
+  margin-top: 3rem;
   display: flex;
 
   span {

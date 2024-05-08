@@ -48,6 +48,7 @@ const state = ref({
 
 // 切换身份
 const setRole = async (role: number) => {
+  if(state.role === role) return
   let bool = false;
   if (
     (role === 1 && store.userInfo.it_enterprise === 1) ||
@@ -57,7 +58,7 @@ const setRole = async (role: number) => {
     bool = true;
   }
 
-  if (!bool) {
+  if (bool) {
     const res = await addRole({
       role: role,
     });
@@ -66,6 +67,7 @@ const setRole = async (role: number) => {
       store.getUserInfo(); //store同步更改
       uStore.setRole(role); //store同步更改
       state.value.role = role;
+      localStorage.setItem('role',role)
     }
   } else {
     state.value.switchRole = role;

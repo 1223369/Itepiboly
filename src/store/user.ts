@@ -5,7 +5,7 @@ export const userStore = defineStore( {
   state: () => {
     return {
       token: localStorage.getItem('token') || '',
-      role: localStorage.getItem('role') || '1',
+      role: localStorage.getItem('role') || '3',
       userInfo: {}
     }
   },

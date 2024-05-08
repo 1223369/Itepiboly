@@ -50,7 +50,6 @@ const submit = async () => {
   }
   // 清空表单
   let ays = Object.keys(state.value);
-  console.log("ays", ays);
   ays.map((k) => {
     state.value[k] = "";
   });

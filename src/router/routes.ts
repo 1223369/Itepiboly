@@ -42,7 +42,7 @@ export const constantRoute: Array<RouteRecordRaw> = [
     path: "/contract",
     component: () => import("@/views/contract/index.vue"),
     meta: {
-      keepAlive: true, //设置页面是否需要使用缓存
+      keepAlive: false, //设置页面是否需要使用缓存
     },
   },
   {
@@ -192,8 +192,6 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/talent/index.vue"),
     meta: {
       KeepAlive: true, // 设置页面是否需要使用缓存
-      requireAuth: true, // 需要用户权限
-      roles: ["2"], // 访问该路由需要的权限
     },
   },
   {

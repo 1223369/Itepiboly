@@ -15,7 +15,7 @@ const goToPage = (path: string) => {
 <template>
   <dl>
     <dt
-      v-if="store.role === 1"
+      v-if="store.role === '1'"
       class="icon-task-bar"
       :class="route.path === '/task' ? 'active' : ''"
       @click="goToPage('/task')"
@@ -24,7 +24,7 @@ const goToPage = (path: string) => {
       <p>任务</p>
     </dt>
     <dt
-      v-if="store.role === 3"
+      v-if="store.role === '3'"
       class="icon-talent-bar"
       :class="route.path === '/talent' ? 'active' : ''"
       @click="goToPage('/talent')"

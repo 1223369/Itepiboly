@@ -84,7 +84,7 @@ if (!store.userInfo.user_name) {
         <img src="@/assets/img/my/icon-task-management.png" />
         <span>任务管理</span>
       </router-link>
-      <router-link to="/my/contract">
+      <router-link to="/my/contract/1">
         <i>{{ state.count.contract_count }}</i>
         <img src="@/assets/img/my/icon-contract-management.png" />
         <span>合约管理</span>
