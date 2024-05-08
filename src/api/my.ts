@@ -279,3 +279,12 @@ export function companyDetail() {
     params: {},
   });
 }
+
+// 企业端企业入驻申请接口
+export function addEnterprise(data: any) {
+  return request({
+    url: "/settlein/enterprise/add",
+    method: "POST",
+    data,
+  });
+}

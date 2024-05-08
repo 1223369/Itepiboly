@@ -13,6 +13,7 @@ import img3 from "@/assets/img/my/icon-enterprise.png";
 import bg3 from "@/assets/img/my/enterprise-bg.png";
 
 const store = myStore();
+const uStore = userStore();
 if (Object.keys(store.userInfo).length === 0) store.getUserInfo();
 
 const switchList = [
@@ -56,17 +57,18 @@ const setRole = async (role: number) => {
     bool = true;
   }
 
-  if (bool) {
+  if (!bool) {
     const res = await addRole({
       role: role,
     });
     if (res) {
       showToast("身份切换成功");
-      store.getUserInfo();
-      userStore().setRole(role);
+      store.getUserInfo(); //store同步更改
+      uStore.setRole(role); //store同步更改
+      state.value.role = role;
     }
   } else {
-    state.role = role;
+    state.value.switchRole = role;
     state.value.show = true;
   }
 };
@@ -89,7 +91,8 @@ const setRole = async (role: number) => {
     <img class="item-back" :src="item.bg" alt="" />
     <strong v-if="store.userInfo.role === item.id">当前身份</strong>
   </div>
-  <!--弹窗-->
+
+  <!--申请权限弹窗-->
   <van-popup
     v-model:show="state.show"
     duration="0"
@@ -97,7 +100,7 @@ const setRole = async (role: number) => {
   >
     <IdentityPopup
       @back="state.show = false"
-      :role="state.role"
+      :role="state.switchRole"
     ></IdentityPopup>
   </van-popup>
 </template>

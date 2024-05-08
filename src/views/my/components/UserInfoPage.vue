@@ -118,7 +118,6 @@ const workTimeConfirm = (value: any) => {
 
 // TODO:选择城市
 const cityConfirm = (value: any) => {
-  console.log("value", value.selectedOptions);
   state.city = value.selectedOptions[0].text;
   state.area = value.selectedOptions[1].text;
   state.showCity = false;
