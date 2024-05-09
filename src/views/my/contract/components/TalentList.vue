@@ -1,9 +1,23 @@
 <script setup lang="ts">
 import { inject, ref } from "vue";
+import { getTalent } from '@/api/talent'
 
 const state = ref({
-  value: "", // 输入框内容
+  list: [], // 人才列表
 });
+
+// 获取人才列表
+const getTalentList = async () => {
+  const res = await getTalent({});
+  console.log('res', res)
+  if (res) {
+    state.value.list = res.records;
+  }
+}
+
+// 方法调用
+getTalentList();
+
 // 接收父组件方法
 const { closeTalent } = inject("popup") as () => void;
 </script>
@@ -11,11 +25,11 @@ const { closeTalent } = inject("popup") as () => void;
 <template>
   <van-nav-bar title="选择人才" left-arrow @click-left="closeTalent('')" />
   <div class="talent-small">
-    <div class="talent-small-item">
-      <img src="" alt="" />
+    <div class="talent-small-item" v-for="item in state.list" :key="item.id" @click="closeTalent(item)">
+      <img :src="item.it_head" alt="" />
       <div class="small-item-text">
-        <h3>李想<i>自营</i></h3>
-        <p>前端工程师 | 男 | 5年 | 本科 | 23岁</p>
+        <h3>{{ item.user_name }}<i>自营</i></h3>
+        <p>{{ item.position_name }} | {{ item.sex == 1 ? '男' : '女' }} | {{ item.work_year }} | {{ item.highest_education }} | {{ item.age }}</p>
       </div>
     </div>
   </div>
