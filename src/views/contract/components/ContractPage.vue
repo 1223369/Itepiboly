@@ -159,6 +159,13 @@ getContractList();
       暂无数据
     </div>
   </van-pull-refresh>
+
+  <!-- 企业端新建合约按钮 -->
+  <router-link v-if="mStore.userInfo.role === 3" to="/my/contract/add">
+    <button class="wy-submit">新建合约</button>
+  </router-link>
+  
+
 </template>
 
 <style scoped lang="scss">
@@ -167,9 +174,8 @@ getContractList();
   height: calc(100vh - 46px - 5rem);
   overflow: auto;
 }
-
+ 
 .contract-tab {
-  margin-top: 3rem;
   display: flex;
 
   span {
