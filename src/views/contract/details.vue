@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { contractDetail,contractOperation } from "@/api/constract";
+import { contractDetail, contractOperation } from "@/api/constract";
 import { useRouter } from "vue-router";
 import { showToast } from "vant";
 import ProgressBar from "@/components/ProgressBar.vue";
+import { userStore } from "@/store/user";
 
-
-
+const store = userStore();
 const router = useRouter();
 // 将路由携带的任务id赋值
 const contractId = router.currentRoute.value.params.id;
@@ -33,30 +33,33 @@ const getContractDetail = async () => {
 // 确认/拒绝签约
 const putContractOperation = async (type: number) => {
   const res = await contractOperation({
-    "is_contract_type": type, 
-    "contract_id": contractId 
+    is_contract_type: type,
+    contract_id: contractId,
   });
   if (res.errcode === 200) leftBack();
 
   showToast(res.meg);
-}
+};
 
 // 拒绝签约
 const refuseChange = () => {
-  putContractOperation(5)
-}
+  putContractOperation(5);
+};
 
 // 确认签约
 const confirmChange = () => {
-  putContractOperation(3)
+  putContractOperation(3);
+};
+
+// 发送合约
+const sendChange = () => {
+  putContractOperation(2);
 }
 
 // 跳转到合约进度页面
 const gotoProgress = () => {
   router.push("/contract/progress/" + state.item.contract_id);
 };
-
-
 
 const leftBack = () => history.back();
 
@@ -69,13 +72,28 @@ getContractDetail();
   <van-loading v-if="state.loading">加载中...</van-loading>
   <dl v-if="!state.loading">
     <!-- 任务发起人详情 -->
-    <dd>
-      <img :src="state.item.create_it_head" />
+    <dd v-if="store.role == '1'">
+      <img :src="state.item.logo" />
       <div>
-        <h5>{{ state.item.company_name || "广州驻场无忧技术有限公司" }}</h5>
+        <h5>{{ state.item.company_name }}</h5>
         <p>{{ state.item.create_user_name }}</p>
       </div>
     </dd>
+
+    <!-- 任务接收人 -->
+    <dd v-if="store.role == '3'">
+      <img :src="state.item.it_head" />
+      <div class="small-item-text">
+        <h3>{{ state.item.user_name }}<i>自营</i></h3>
+        <p>
+          {{ state.item.position_name }} ｜{{ state.item.sex }} ｜
+          {{ state.item.work_year }} ｜ {{ state.item.highest_education }} ｜{{
+            state.item.age
+          }}
+        </p>
+      </div>
+    </dd>
+
     <dt>
       <label>合约状态</label>
       <span>{{ state.item.is_contract_type_text || "-" }}</span>
@@ -125,12 +143,25 @@ getContractDetail();
 
   <!-- 底部操作按钮 -->
   <div class="contract-btn" v-if="!state.loading">
-    <button class="refuse-btn" v-if="state.item.is_contract_type === 2" v-debounce="refuseChange">
+    <!-- 发送合约 -->
+    <button class="confirm-btn" v-if="state.item.is_contract_type===1" v-debounce="sendChange">发送合约</button>
+    <!-- 拒绝签约 -->
+    <button
+      class="refuse-btn"
+      v-if="state.item.is_contract_type === 2"
+      v-debounce="refuseChange"
+    >
       拒绝签约
     </button>
-    <button class="confirm-btn" v-if="state.item.is_contract_type === 2" v-debounce="confirmChange">
+    <!-- 确认签约 -->
+    <button
+      class="confirm-btn"
+      v-if="state.item.is_contract_type === 2"
+      v-debounce="confirmChange"
+    >
       确认签约
     </button>
+    <!-- 合约进度 -->
     <button
       class="confirm-btn"
       @click="gotoProgress"
@@ -141,7 +172,6 @@ getContractDetail();
       合约进度
     </button>
   </div>
-
 </template>
 
 <style scoped lang="scss">
@@ -176,7 +206,35 @@ dl {
       line-height: 0.69rem;
     }
   }
-
+  .small-item-text {
+    h3 {
+      font-size: 0.96rem;
+      line-height: 0.96rem;
+      font-weight: 300;
+      color: #333333;
+      margin-bottom: 0.48rem;
+      i {
+        width: 1.97rem;
+        height: 0.85rem;
+        line-height: 0.85rem;
+        display: inline-block;
+        background: linear-gradient(90deg, #fea829, #fe8f27);
+        border-radius: 1.5rem 1rem 1rem 1rem;
+        font-size: 0.59rem;
+        font-weight: normal;
+        color: #ffffff;
+        font-style: normal;
+        text-align: center;
+        margin-left: 0.64rem;
+      }
+    }
+    p {
+      font-size: 0.69rem;
+      line-height: 0.69rem;
+      font-weight: 100;
+      color: #333333;
+    }
+  }
   dt {
     display: flex;
     margin-bottom: 1rem;

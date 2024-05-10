@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, provide } from "vue";
 import { contractDetail } from "@/api/constract";
 import { useRouter } from "vue-router";
 import { showToast } from "vant";
+import { userStore } from "@/store/user";
 import ProgressBar from "@/components/ProgressBar.vue";
+import ProgressEvalution from "./components/ProgressEvalution.vue";
+
+const store = userStore();
 const router = useRouter();
 // 将路由携带的任务id赋值
 const contractId = router.currentRoute.value.params.id;
 const state = reactive({
   // 职位类型默认值
   item: [],
+  num: 0, // 当前评估阶段
   loading: false,
+  evaluationVisible: false, // 评估弹窗状态
 });
 
 // 获取任务详情
@@ -27,7 +33,26 @@ const getContractDetail = async () => {
   state.loading = false;
 };
 
+// TODO: 评估每个阶段
+const evaluation = (num: number) => {
+  state.num = num;
+  state.evaluationVisible = true;
+};
+
+// 关闭评估弹窗
+const closeEvaluation = (bool: any) => {
+  if (bool) {
+    getContractDetail();
+  }
+  state.evaluationVisible = false;
+};
+
 const leftBack = () => history.back();
+
+// 向子组件传递方法
+provide("popup", {
+  closeEvaluation,
+});
 
 // 执行函数
 getContractDetail();
@@ -51,7 +76,15 @@ getContractDetail();
       <dt>
         <h4>
           第一阶段开发进度评估
-          <span v-if="state.item.contract_I_state == -1">暂无评估</span>
+          <span v-if="state.item.contract_I_state == -1 && store.role != 3"
+            >暂无评估</span
+          >
+          <span
+            class="active"
+            v-if="state.item.contract_I_state == -1 && store.role == 3"
+            @click="evaluation(1)"
+            >去评估</span
+          >
         </h4>
         <p v-if="state.item.contract_I_stage">
           {{ state.item.contract_I_stage }}
@@ -60,7 +93,15 @@ getContractDetail();
       <dt>
         <h4>
           第二阶段开发进度评估
-          <span v-if="state.item.contract_II_state == -1">暂无评估</span>
+          <span v-if="state.item.contract_II_state == -1 && store.role != 3"
+            >暂无评估</span
+          >
+          <span
+            class="active"
+            v-if="state.item.contract_II_state == -1 && store.role == 3"
+            @click="evaluation(2)"
+            >去评估</span
+          >
         </h4>
         <p v-if="state.item.contract_II_stage">
           {{ state.item.contract_II_stage }}
@@ -69,7 +110,15 @@ getContractDetail();
       <dt>
         <h4>
           第三阶段开发进度评估
-          <span v-if="state.item.contract_III_state == -1">暂无评估</span>
+          <span v-if="state.item.contract_III_state == -1 && store.role != 3"
+            >暂无评估</span
+          >
+          <span
+            class="active"
+            v-if="state.item.contract_III_state == -1 && store.role == 3"
+            @click="evaluation(3)"
+            >去评估</span
+          >
         </h4>
         <p v-if="state.item.contract_III_stage">
           {{ state.item.contract_III_stage }}
@@ -78,7 +127,15 @@ getContractDetail();
       <dt>
         <h4>
           第四阶段开发进度评估
-          <span v-if="state.item.contract_IIII_state == -1">暂无评估</span>
+          <span v-if="state.item.contract_IIII_state == -1 && store.role != 3"
+            >暂无评估</span
+          >
+          <span
+            class="active"
+            v-if="state.item.contract_IIII_state == -1 && store.role == 3"
+            @click="evaluation(4)"
+            >去评估</span
+          >
         </h4>
         <p v-if="state.item.contract_IIII_stage">
           {{ state.item.contract_IIII_stage }}
@@ -86,6 +143,16 @@ getContractDetail();
       </dt>
     </dl>
   </div>
+
+  <!--进度评估弹窗-->
+  <van-popup
+    v-model:show="state.evaluationVisible"
+    position="top"
+    duration="0"
+    :style="{ width: '100%', height: '100%' }"
+  >
+    <ProgressEvalution :num="state.num" :id="contractId"></ProgressEvalution>
+  </van-popup>
 </template>
 
 <style scoped lang="scss">

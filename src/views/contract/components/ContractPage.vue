@@ -72,10 +72,11 @@ const state = reactive({
 let isScroll = ref<boolean>(false);
 
 // 获取列表
-const getContractList = async () => {
+const getContractList = async () => { 
   state.loading = true;
   const res = await contractList({
     is_contract_type: state.type,
+    curr_identity: mStore.userInfo.role,
   });
 
   if (res) {

@@ -9,7 +9,7 @@ const { closeDemand } = inject("popup") as () => void;
 </script>
 
 <template>
-  <van-nav-bar title="任务要求" left-arrow @click-left="closeDemand()" />
+  <van-nav-bar title="任务要求" left-arrow @click-left="closeDemand('')" />
   <van-field
     v-model="state.value"
     rows="12"

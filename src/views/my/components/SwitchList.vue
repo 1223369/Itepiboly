@@ -65,9 +65,9 @@ const setRole = async (role: number) => {
     if (res) {
       showToast("身份切换成功");
       store.getUserInfo(); //store同步更改
-      uStore.setRole(role); //store同步更改
+      uStore.setRole(role as unknown as string); //store同步更改
       state.value.role = role;
-      localStorage.setItem('role',role)
+      localStorage.setItem('role',role as unknown as string)
     }
   } else {
     state.value.switchRole = role;

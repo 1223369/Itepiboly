@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { reactive, provide } from "vue";
-import { addTask } from "@/api/task";
+import { contractAdd } from "@/api/constract";
 import { showToast } from "vant";
-import { myStore } from "@/store/my";
 import TalentList from "./components/TalentList.vue";
 import ContractDemand from "./components/ContractDemand.vue";
 
-const store = myStore();
 
-// 日期选择器展示方式
-const columnsType = ["year", "month"];
 const time = new Date();
 
 const state = reactive({
@@ -57,7 +53,8 @@ const endTimeConfirm = (value: any) => {
 
 // 关闭人才选择弹窗
 const closeTalent = (item: any) => {
-  state.talentName = item.name;
+  state.talentName = item.user_name;
+  state.talentId = item.id;
   state.talentBool = false;
 };
 
@@ -65,51 +62,58 @@ const closeTalent = (item: any) => {
 const closeDemand = (value: string) => {
   if (value) {
     state.contractDemand = value;
-    state.contractDemandBool = false;
+  } else {
+    state.contractDemand = ''
   }
+  state.contractDemandBool = false;
 };
 
-// TODO: 选择服务方式
+// TODO: 结薪方式选择
 const serviceModeSelect = (value: any) => {
   state.serviceMode = value.name;
   state.serviceModeBool = false;
 };
 
-// TODO: 新增任务
+// TODO: 新增合约
 const setTaskModify = async () => {
   if (!state.taskName) {
-    showToast("请填写任务名称");
+    showToast("请填写合约名称");
     return;
   }
-  if (!state.positionName) {
-    showToast("请选择职位类型");
+  if (!state.talentName) {
+    showToast("请选择企业人才");
     return;
   }
   if (!state.taskBudget) {
-    showToast("请输入任务预算");
+    showToast("请输入合约预算");
     return;
   }
-  if (!state.taskCycle) {
-    showToast("请选择任务周期");
+  if (!state.startTime) {
+    showToast("请选择合约开始时间");
+    return;
+  }
+  if (!state.endTime) {
+    showToast("请选择合约结束时间");
     return;
   }
   if (!state.serviceMode) {
-    showToast("请选择服务方式");
+    showToast("请选择结薪方式");
     return;
   }
   if (!state.contractDemand) {
-    showToast("请选择任务要求");
+    showToast("请选择合约要求");
     return;
   }
   state.loading = true;
-  const res = await addTask({
-    task_name: state.taskName,
-    position_name: state.positionName,
-    task_budget: state.taskBudget,
-    task_cycle: parseFloat(state.taskCycle),
-    service_mode: state.serviceMode,
+  const res = await contractAdd({
+    contract_type: "技术服务",
+    contract_name: state.taskName,
+    task_salary: state.taskBudget,
+    start_cycle_time: state.startTime,
+    end_cycle_time: state.endTime,
+    check_out: state.serviceMode,
     task_ask: state.contractDemand,
-    is_emergency: state.taskType ? 1 : 0,
+    user_id: state.talentId,
   });
   if (res) {
     showToast("新增任务成功");
@@ -117,7 +121,6 @@ const setTaskModify = async () => {
   } else {
     showToast("添加失败");
   }
-  showToast(res.msg);
   state.loading = false;
 };
 
@@ -149,7 +152,7 @@ provide("popup", {
       <div class="user-item">
         <h5>IT企业人才</h5>
         <van-field
-          v-model="state.positionName"
+          v-model="state.talentName"
           readonly
           is-link
           @click="state.talentBool = true"
@@ -295,13 +298,18 @@ provide("popup", {
       display: flex;
       align-items: center;
       span {
-        width: 0.83rem;
+        width: 0.43rem;
         height: 0.05rem;
         margin-right: 2.4rem;
-        background: #333333;
+        background: #999999;
       }
       .van-cell {
         width: 6rem;
+      }
+      .van-field__right-icon {
+        text-align: right;
+        flex: 1;
+        margin-right: 0.5rem;
       }
     }
   }
