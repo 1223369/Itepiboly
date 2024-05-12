@@ -132,11 +132,15 @@ getContractDetail();
       <label>合约结算</label>
       <span>{{ state.item.settle_salary || "-" }}</span>
     </dt>
-    <dt>
+    <dt v-if="
+        state.item.is_contract_type !== 1 && state.item.is_contract_type !== 2
+      ">
       <label>合约进度</label>
       <span></span>
     </dt>
-    <dt>
+    <dt v-if="
+        state.item.is_contract_type !== 1 && state.item.is_contract_type !== 2
+      ">
       <ProgressBar :item="state.item"></ProgressBar>
     </dt>
   </dl>
@@ -166,7 +170,7 @@ getContractDetail();
       class="confirm-btn"
       @click="gotoProgress"
       v-if="
-        state.item.is_contract_type != 1 && state.item.is_contract_type != 2
+        state.item.is_contract_type !== 1 && state.item.is_contract_type !== 2
       "
     >
       合约进度
@@ -179,7 +183,7 @@ dl {
   font-size: 0.69rem;
   color: #666666;
 
-  dd {
+  dd { 
     display: flex;
     align-items: center;
     border-bottom: 1px solid #eeeeee;

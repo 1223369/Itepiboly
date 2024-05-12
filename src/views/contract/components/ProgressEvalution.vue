@@ -8,6 +8,9 @@ const state = ref({
   evalType: 1, // 当前评估阶段
 });
 
+// 处理阿拉伯数字
+const numText = ["零", "一", "二", "三", "四"]
+
 // 接收父组件参数
 const props = defineProps({
   num: {
@@ -25,6 +28,8 @@ const { closeEvaluation } = inject("popup");
 const evalTypeClick = (type: number) => {
   state.value.evalType = type;
 };
+
+
 
 // 提交评估
 const setProgressGrade = async () => {
@@ -58,7 +63,7 @@ const setProgressGrade = async () => {
     @click-left="closeEvaluation(false)"
   />
   <div class="eval-cont">
-    <h3>第{{ props.num }}阶段</h3>
+    <h3>第{{ numText[props.num] }}阶段</h3>
     <p>
       <span @click="evalTypeClick(1)" :class="state.evalType === 1 ? 'active' : ''">通过</span>
       <span @click="evalTypeClick(2)" :class="state.evalType === 2 ? 'active' : ''">有风险</span>

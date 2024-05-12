@@ -8,6 +8,7 @@ import ContractDemand from "./components/ContractDemand.vue";
 
 const time = new Date();
 
+
 const state = reactive({
   talentBool: false, // 人才弹窗
   contractDemandBool: false, // 任务要求弹窗
@@ -31,15 +32,16 @@ const state = reactive({
   endTime: "", // 结束时间
   serviceMode: "", // 服务方式
   contractDemand: "", // 任务要求
-  minDate: new Date(time.getFullYear() - 1, time.getMonth(), time.getDate()), // 合约开始最小日期
+  minDate: new Date(time.getFullYear() - 1, time.getMonth(), time.getDate()),// 合约开始最小日期
   maxDate: new Date(time.getFullYear() + 3, time.getMonth(), time.getDate()), // 合约解释最大日期
 });
+// 解决ios日期选择显示NaN
 
 // 合约开始时间
 const startTimeConfirm = (value: any) => {
   let date = new Date(value.selectedValues);
   state.startTime =
-    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
   state.showStartTime = false;
 };
 
@@ -47,7 +49,7 @@ const startTimeConfirm = (value: any) => {
 const endTimeConfirm = (value: any) => {
   let date = new Date(value.selectedValues);
   state.endTime =
-    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
   state.showEndTime = false;
 };
 
@@ -201,6 +203,7 @@ provide("popup", {
             :max-date="state.maxDate"
             @confirm="startTimeConfirm"
             @cancel="state.showStartTime = false"
+            
           />
         </van-action-sheet>
         <van-action-sheet v-model:show="state.showEndTime">

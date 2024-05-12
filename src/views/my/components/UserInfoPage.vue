@@ -21,8 +21,7 @@ const sexList = [
   { name: "女", value: "female" },
 ];
 
-// 日期选择器展示方式
-const columnsType = ["year", "month"];
+
 
 // 将路由携带的任务id赋值
 const id = router.currentRoute.value.params.id;
@@ -34,7 +33,7 @@ const state = reactive({
   showSex: false, // 性别弹窗是否显示
   showBirthday: false, // 生日弹窗是否显示
   birthday: "", // 生日
-  minDate: new Date(1970, 0, 1), // 最小日期
+  minDate: new Date(1970,0,1), // 最小日期
   maxDate: new Date(), // 最大日期
   showWorkTime: false, // 参加工作时间弹窗是否显示
   workTime: "", // 参加工作时间
@@ -72,7 +71,7 @@ const getSystemDetails = async () => {
   if (res) {
     state.item = res[0];
   } else {
-    showshowToast(res.msg);
+    showToast(res.msg);
   }
   state.loading = false;
 };
@@ -105,14 +104,14 @@ const sexSelect = (value: any) => {
 // TODO:选择日期
 const birthdayConfirm = (value: any) => {
   let date = new Date(value.selectedValues);
-  state.birthday = date.getFullYear() + "-" + (date.getMonth() + 1);
+  state.birthday = date.getFullYear() + "/" + (date.getMonth() + 1);
   state.showBirthday = false;
 };
 
 // TODO:选择参加工作时间
 const workTimeConfirm = (value: any) => {
   let date = new Date(value.selectedValues);
-  state.workTime = date.getFullYear() + "-" + (date.getMonth() + 1);
+  state.workTime = date.getFullYear() + "/" + (date.getMonth() + 1);
   state.showWorkTime = false;
 };
 
@@ -240,7 +239,6 @@ if (!store.userInfo.user_name) {
             title="选择日期"
             :min-date="state.minDate"
             :max-date="state.maxDate"
-            :columnsType="columnsType"
             @confirm="birthdayConfirm"
             @cancel="state.showBirthday = false"
           />
@@ -251,7 +249,7 @@ if (!store.userInfo.user_name) {
         <h5>参加工作时间</h5>
         <van-field
           v-model="state.workTime"
-          readonlyime
+          readonly
           is-link
           @click="state.showWorkTime = true"
           placeholder="请选择您的参加工作时间"
@@ -261,7 +259,6 @@ if (!store.userInfo.user_name) {
             title="选择日期"
             :min-date="state.minDate"
             :max-date="state.maxDate"
-            :columnsType="columnsType"
             @confirm="workTimeConfirm"
             @cancel="state.showWorkTime = false"
           />

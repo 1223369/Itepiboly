@@ -28,8 +28,10 @@ const gotoPage = (path: string) => {
 
 if (!store.userInfo.user_name) {
   store.getUserInfo();
-  getMyAllCount()
 }
+
+// 函数调用
+getMyAllCount()
 
 </script>
 
@@ -334,7 +336,6 @@ if (!store.userInfo.user_name) {
   // 企业端我的收藏部分
   .my-type-enterprise {
     display: flex;
-    width: 21.95rem;
     height: 5.27rem;
     border-radius: 0.27rem;
     background: #ffffff;

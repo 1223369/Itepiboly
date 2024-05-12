@@ -83,7 +83,7 @@ const closePositionType = (name: string) => {
 // 关闭筛选弹窗
 const closeScreen = (obj: string) => {
   if (obj) {
-    state.highest = obj.highest;
+    state.highest = obj.highest.value;
     state.salary = obj.salary;
     state.experience = obj.experience;
     onRefresh();
