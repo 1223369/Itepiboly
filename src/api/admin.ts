@@ -8,3 +8,12 @@ export function adminContractList(data: any) {
     params: data,
   });
 }
+
+// 管理员端-合约是否完成接口
+export function adminContractConfirm(data: any) {
+  return request({
+    url: "/admin/home/contract/confirm",
+    method: "POST",
+    data,
+  });
+}
