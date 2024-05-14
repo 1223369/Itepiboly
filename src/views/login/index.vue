@@ -68,19 +68,23 @@ const router = useRouter();
       code: state.code
     })
 
-    console.log('res', res)
     if (res.errCode === 200) {
       // 登录成功后数据存入store
       showToast('登录成功');
       store.setUserInfo(res.data);
-
+      console.log('res', res)
       
-      if (res.data.role === 2) {
+      if (res.data.user_info.role == 3) {
         //企业端
         router.push('/talent');
-      } else {
+      }
+      if(res.data.user_info.role == 1) {
         //人才端
         router.push('/task');
+      }
+      if(res.data.user_info.role == 2) {
+        // 管理端
+        router.push('/admin/home');
       }
     } else {
       showToast(res.msg);

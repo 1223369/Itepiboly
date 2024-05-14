@@ -210,4 +210,12 @@ export const constantRoute: Array<RouteRecordRaw> = [
       KeepAlive: true, // 设置页面是否需要使用缓存
     },
   },
+  {
+    path: "/admin/home",
+    component: () => import("@/views//admin/home/index.vue"),
+  },
+  {
+    path: "/admin/home/contract",
+    component: () => import("@/views//admin/home/contract/index.vue"),
+  },
 ];

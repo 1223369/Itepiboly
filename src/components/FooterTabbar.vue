@@ -15,7 +15,7 @@ const goToPage = (path: string) => {
 <template>
   <dl>
     <dt
-      v-if="store.role == '1'"
+      v-if="store.role == '1' && store.role != '2'"
       class="icon-task-bar"
       :class="route.path === '/task' ? 'active' : ''"
       @click="goToPage('/task')"
@@ -24,7 +24,7 @@ const goToPage = (path: string) => {
       <p>任务</p>
     </dt>
     <dt
-      v-if="store.role == '3'"
+      v-if="store.role == '3' && store.role != '2'"
       class="icon-talent-bar"
       :class="route.path === '/talent' ? 'active' : ''"
       @click="goToPage('/talent')"
@@ -33,6 +33,16 @@ const goToPage = (path: string) => {
       <p>it人才</p>
     </dt>
     <dt
+      v-if="store.role == '2'"
+      class="icon-task-bar"
+      :class="route.path === '/admin/home' ? 'active' : ''"
+      @click="goToPage('/admin/home')"
+    >
+      <i></i>
+      <p>首页</p>
+    </dt>
+    <dt
+      v-if="store.role != '2'"
       class="icon-contract-bar"
       :class="route.path === '/contract' ? 'active' : ''"
       @click="goToPage('/contract')"
@@ -41,6 +51,7 @@ const goToPage = (path: string) => {
       <p>合约</p>
     </dt>
     <dt
+      v-if="store.role != '2'"
       class="icon-message-bar"
       :class="route.path === '/message' ? 'active' : ''"
       @click="goToPage('/message')"
