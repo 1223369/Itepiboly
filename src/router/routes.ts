@@ -226,5 +226,9 @@ export const constantRoute: Array<RouteRecordRaw> = [
     path: "/admin/home/auditor",
     component: () => import("@/views//admin/home/auditor/index.vue"),
   },
+  {
+    path: "/admin/home/auditor/task/:id",
+    component: () => import("@/views//admin/home/auditor/taskDetail.vue"),
+  },
   
 ];

@@ -26,3 +26,30 @@ export function adminPayConfirm(data: any) {
     data,
   });
 }
+
+// 管理员端-审核管理-任务列表接口
+export function adminAuditorTaskList(data: any) {
+  return request({
+    url: "/admin/home/auditor/task/list",
+    method: "GET",
+    params: data,
+  });
+}
+
+// 管理员端-审核管理-任务详情接口
+export function adminAuditorTaskDetail(data: any) {
+  return request({
+    url: "/admin/home/auditor/task/detail",
+    method: "GET",
+    params: data,
+  });
+}
+
+// 管理员端-审核管理-任务操作审核接口
+export function adminAuditorTaskEdit(data: any) {
+  return request({
+    url: "/admin/home/auditor/task/edit",
+    method: "POST",
+    data,
+  });
+}

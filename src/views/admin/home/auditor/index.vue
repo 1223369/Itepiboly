@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { adminContractList, adminContractConfirm } from "@/api/admin";
+import { adminAuditorTaskList } from "@/api/admin";
 import { useRouter } from "vue-router";
 import { showToast } from "vant";
 import Tabs from "@/components/Tabs.vue";
-import ProgressBar from "@/components/ProgressBar.vue";
 
 const tabs = [
   {
@@ -24,23 +23,24 @@ const router = useRouter();
 
 const state = reactive({
   type: 0, // tab类型
-  // 合同列表
-  contractList: [],
   loading: false,
   bool: false, // 是否展示弹窗
   selectType: 0, // 合约状态：4合约完成 5合约终止
   selectId: 0, // 选择的合约id
+  taskList: [], // 任务列表
+  talentList: [], // 人才列表
+  companyList: [], // 企业列表
 });
 
-// 获取列表
-const getContractList = async () => {
+// 获取审核任务列表
+const getAdminAuditorTaskList = async () => {
   state.loading = true;
-  const res = await adminContractList({
+  const res = await adminAuditorTaskList({
     is_contract_type: state.type,
   });
 
   if (res) {
-    state.contractList = res.records;
+    state.taskList = res.records;
   } else {
     showToast(res.msg);
   }
@@ -51,77 +51,31 @@ const getContractList = async () => {
 const setTabList = (type: number) => {
   if (state.type === type) return;
   state.type = type;
-  getContractList();
+  getAdminAuditorTaskList();
 };
 
 // 跳转详情页
 const gotoDetail = (id: number) => {
-  router.push("/contract/details/" + id);
-};
-
-// 处理任务紧急程度文字
-const contractStateText = (num: number) => {
-  return num === 1 ? "正常" : num === 2 ? "风险" : "问题严重";
-};
-
-// 处理任务紧急程度数据
-const contractState = (item: any) => {
-  let str = "正常";
   switch (true) {
-    case item.contract_IIII_state > 0:
-      return contractStateText(item.contract_IIII_state);
+    case state.type === 0:
+      router.push("/admin/home/auditor/task/" + id);
       break;
-
-    case item.contract_III_state > 0:
-      return contractStateText(item.contract_IIII_state);
+    case state.type === 1:
+      router.push("/admin/home/auditor/task/" + id);
       break;
-
-    case item.contract_II_state > 0:
-      return contractStateText(item.contract_IIII_state);
+    case state.type === 2:
+      router.push("/admin/home/auditor/company/" + id);
       break;
-
-    case item.contract_I_state > 0:
-      return contractStateText(item.contract_IIII_state);
-      break;
-
     default:
-      return str;
       break;
   }
-};
-
-// 完成合约按钮事件
-const completeContract = (item: any) => {
-  state.selectType = 4;
-  state.selectId = item.contract_id;
-  state.bool = true;
-};
-// 中止合约按钮事件
-const overContract = (item: any) => {
-  state.selectType = 5;
-  state.selectId = item.contract_id;
-  state.bool = true;
-};
-
-// 弹窗确认事件
-const contractConfirm = async () => {
-  const res = await adminContractConfirm({
-    is_contract_type: state.selectType, // 4合约完成 5合约终止
-    contract_id: state.selectId,
-  });
-
-  if (res) {
-    getContractList();
-  }
-
-  state.bool = false;
 };
 
 // 返回上一级路由
 const leftBack = () => history.back();
 
 // 方法调用
-getContractList();
+getAdminAuditorTaskList();
 </script>
 
 <template>
@@ -129,105 +83,118 @@ getContractList();
     <van-nav-bar title="审核管理" left-arrow @click-left="leftBack" />
     <Tabs :tabs="tabs" @tabsCall="setTabList"></Tabs>
 
-    <!-- 合约列表 -->
-    <van-pull-refresh
-      class="task-list"
-      v-model="state.loading"
-      success-text="刷新成功"
-      @refresh="getContractList"
-    >
-      <div
-        class="home-contract-list"
-        v-for="(item, index) in state.contractList"
-        :key="index"
-        @click="gotoDetail((item as any).contract_id)"
+    <!-- 任务审核列表 -->
+    <div v-if="state.type === 0">
+      <van-pull-refresh
+        class="task-list"
+        v-model="state.loading"
+        success-text="刷新成功"
+        @refresh="getAdminAuditorTaskList"
       >
-        <dl>
+        <dl
+          v-for="(item, index) in state.taskList"
+          :key="index"
+          @click="gotoDetail((item as any).task_id)"
+        >
           <!-- 合约名称 -->
           <dt>
-            <h3>{{ item.contract_name }}</h3>
+            <h3>
+              {{ item.task_name }}
+              <i v-if="item.is_check === 0">未审核</i>
+              <i v-if="item.is_check === 1">审核通过</i>
+              <i v-if="item.is_check === 2">审核失败</i>
+              <i v-if="item.is_check === 3">已关闭</i>
+            </h3>
           </dt>
 
-          <!-- 合约内容 -->
           <dt>
-            <label for="">公司名称：</label>
-            <span>{{ item.company_name }}</span>
-          </dt>
-          <dt>
-            <label for="">任务薪资：</label>
-            <span>{{ item.task_salary }}/个</span>
+            <label for="">任务预算：</label>
+            <span>{{ item.task_budget }}</span>
           </dt>
           <dt>
-            <label for="">合约周期：</label>
-            <span
-              >{{ item.start_cycle_time.replaceAll("-", ".") }}-{{
-                item.end_cycle_time.replaceAll("-", ".")
-              }}</span
-            >
+            <label for="">任务周期：</label>
+            <span>{{ item.task_cycle }}/个</span>
           </dt>
-          <dt class="wy-flex">
-            <label for="">合约进度：</label>
-            <ProgressBar :item="item" />
+          <dt>
+            <label for="">服务方式：</label>
+            <span>{{ item.service_mode }} </span>
           </dt>
+          <dt>
+            <label for="">任务要求：</label>
+            <span>{{ item.task_ask }}</span>
+          </dt>
+          <dd>
+            <button>操作审核</button>
+          </dd>
         </dl>
 
-        <!-- 底部状态和按钮 -->
-        <div class="home-contract-bottom">
-          <!-- 合约状态 -->
-          <div
-            :class="
-              contractState(item) === '风险'
-                ? 'origin'
-                : contractState(item) === '问题严重'
-                ? 'red'
-                : ''
-            "
-          >
-            <i></i>
-            <span>{{ contractState(item) }}</span>
-          </div>
-
-          <button
-            v-if="item.is_contract_type === 3"
-            @click="completeContract(item)"
-          >
-            完成合约
-          </button>
-          <button
-            v-if="item.is_contract_type === 3"
-            @click="overContract(item)"
-          >
-            中止合约
-          </button>
+        <van-loading v-if="state.loading">加载中...</van-loading>
+        <div
+          class="wy-no-data"
+          v-if="!state.loading && state.taskList.length == 0"
+        >
+          暂无数据
         </div>
-      </div>
+      </van-pull-refresh>
+    </div>
 
-      <van-loading v-if="state.loading">加载中...</van-loading>
-      <div
-        class="wy-no-data"
-        v-if="!state.loading && state.contractList.length == 0"
+    <!-- 个人认证列表 -->
+    <div v-if="state.type === 1">
+      <van-pull-refresh
+        class="task-list"
+        v-model="state.loading"
+        success-text="刷新成功"
+        @refresh="getAdminAuditorTaskList"
       >
-        暂无数据
-      </div>
-    </van-pull-refresh>
+        <dl
+          v-for="(item, index) in state.taskList"
+          :key="index"
+          @click="gotoDetail((item as any).task_id)"
+        >
+          <!-- 合约名称 -->
+          <dt>
+            <h3>
+              {{ item.task_name }}
+              <i v-if="item.is_check === 0">未审核</i>
+              <i v-if="item.is_check === 1">审核通过</i>
+              <i v-if="item.is_check === 2">审核失败</i>
+              <i v-if="item.is_check === 3">已关闭</i>
+            </h3>
+          </dt>
 
-    <van-popup
-      v-model:show="state.bool"
-      closeable
-      round
-      :style="{ width: ' 13.07rem', height: '9.75rem' }"
-    >
-      <div class="admin-contract-popup">
-        <h5>温馨提示</h5>
-        <p v-if="state.selectType === 4">
-          当前合约进度已正常完成， <br />完成合约进行后续薪资发放。
-        </p>
-        <p v-if="state.selectType === 5">
-          当前合约进度存在异常， <br />经双方沟通决定终止合约。
-        </p>
-        <button @click="contractConfirm()">确定</button>
-      </div>
-    </van-popup>
+          <dt>
+            <label for="">任务预算：</label>
+            <span>{{ item.task_budget }}</span>
+          </dt>
+          <dt>
+            <label for="">任务周期：</label>
+            <span>{{ item.task_cycle }}/个</span>
+          </dt>
+          <dt>
+            <label for="">服务方式：</label>
+            <span>{{ item.service_mode }} </span>
+          </dt>
+          <dt>
+            <label for="">任务要求：</label>
+            <span>{{ item.task_ask }}</span>
+          </dt>
+          <dd>
+            <button>操作审核</button>
+          </dd>
+        </dl>
+
+        <van-loading v-if="state.loading">加载中...</van-loading>
+        <div
+          class="wy-no-data"
+          v-if="!state.loading && state.taskList.length == 0"
+        >
+          暂无数据
+        </div>
+      </van-pull-refresh>
+    </div>
+
+    <!-- 企业认证列表 -->
+    <div v-if="state.type === 2"></div>
   </div>
 </template>
 
@@ -242,141 +209,69 @@ getContractList();
   background: #f6f6f6;
   height: 100vh;
   overflow: auto;
-
-  .home-contract-list {
+  dl {
     background: #ffffff;
     border-radius: 0.53rem;
     margin: 0 0.59rem 0.53rem;
     padding: 0.88rem 0.48rem 0.64rem;
 
-    .wy-flex {
-      display: flex;
-      align-items: center;
-    }
-    .contract-progress {
-      flex: 1;
-    }
-    // 合约列表
-    dl {
-      dt {
-        margin-bottom: 0.51rem;
+    dt {
+      margin-bottom: 0.48rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
 
-        h3 {
-          font-size: 0.91rem;
-          font-weight: 400;
-          color: #333333;
-          line-height: 0.91rem;
-          margin-bottom: 0.83rem;
-        }
-        label {
-          font-size: 0.69rem;
-          line-height: 0.69rem;
-          font-weight: 300;
-          color: #666666;
-        }
-        span {
-          font-size: 0.69rem;
-          line-height: 0.69rem;
-          font-weight: 300;
-          color: #333333;
-        }
-      }
-    }
-
-    // 合约状态和按钮样式
-    .home-contract-bottom {
-      border-top: 1px solid #f5f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 0 0 0.2rem;
-
-      div {
-        width: 8rem;
+      h3 {
+        font-size: 0.91rem;
+        line-height: 0.91rem;
+        font-weight: 400;
+        color: #333333;
+        margin-bottom: 0.83rem;
 
         i {
-          width: 0.37rem;
-          height: 0.37rem;
-          background: #50d400;
-          border-radius: 50%;
-          display: inline-block;
-        }
-
-        span {
+          font-style: normal;
           font-size: 0.64rem;
           line-height: 0.64rem;
           font-weight: 400;
-          color: #50d400;
-          margin-left: 0.32rem;
-        }
-      }
-
-      div.origin {
-        i {
-          background: #fe9215;
-        }
-
-        span {
           color: #fe9215;
+          float: right;
         }
       }
 
-      div.red {
-        i {
-          background: #ff0000;
-        }
-
-        span {
-          color: #ff0000;
-        }
+      label {
+        font-size: 0.69rem;
+        line-height: 0.69rem;
+        font-weight: 300;
+        color: #666666;
+        padding-right: 0.48rem;
       }
+
+      span {
+        font-size: 0.69rem;
+        line-height: 0.69rem;
+        font-weight: 300;
+        color: #333333;
+      }
+    }
+
+    dd {
+      border-top: 1px solid #f5f5f5;
+      overflow: hidden;
+      padding: 0.53rem 0rem 0 0;
+      margin-top: 0.68rem;
 
       button {
+        border: none;
         width: 4rem;
         height: 1.39rem;
         background: #fe9215;
         border-radius: 0.16rem;
         font-size: 0.69rem;
-        line-height: 1.39rem;
-        text-align: center;
         font-weight: 100;
         color: #ffffff;
-        border: none;
+        text-align: center;
+        float: right;
       }
-    }
-  }
-
-  .admin-contract-popup {
-    padding: 1.4rem 1rem;
-
-    h5 {
-      font-size: 0.85rem;
-      line-height: 0.85rem;
-      margin-bottom: 0.8rem;
-      font-weight: 400;
-      color: #333333;
-      text-align: center;
-    }
-    p {
-      font-size: 0.8rem;
-      font-weight: 400;
-      color: #333333;
-      line-height: 1.28rem;
-      text-align: center;
-      margin-bottom: 0.76rem;
-    }
-    button {
-      width: 10.99rem;
-      height: 1.92rem;
-      background: #fe9215;
-      border: 0px solid #ff6f00;
-      border-radius: 0.16rem;
-      font-size: 0.85rem;
-      line-height: 1.92rem;
-      text-align: center;
-      font-weight: 400;
-      color: #ffffff;
-      border: none;
     }
   }
 }
