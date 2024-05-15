@@ -17,3 +17,12 @@ export function adminContractConfirm(data: any) {
     data,
   });
 }
+
+// 管理员端-合约发薪接口
+export function adminPayConfirm(data: any) {
+  return request({
+    url: "/admin/home/contract/pay/confirm",
+    method: "POST",
+    data,
+  });
+}

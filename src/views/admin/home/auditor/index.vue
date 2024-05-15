@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { adminContractList, adminContractConfirm } from "@/api/admin";
-import {useRouter} from 'vue-router'
+import { useRouter } from "vue-router";
 import { showToast } from "vant";
 import Tabs from "@/components/Tabs.vue";
 import ProgressBar from "@/components/ProgressBar.vue";
@@ -9,18 +9,18 @@ import ProgressBar from "@/components/ProgressBar.vue";
 const tabs = [
   {
     type: 0,
-    text: "全部",
+    text: "任务审核",
   },
   {
-    type: 3,
-    text: "履约中",
+    type: 1,
+    text: "个人认证",
   },
   {
-    type: 4,
-    text: "已完成",
+    type: 2,
+    text: "企业认证",
   },
 ];
-const router = useRouter()
+const router = useRouter();
 
 const state = reactive({
   type: 0, // tab类型
@@ -126,7 +126,7 @@ getContractList();
 
 <template>
   <div class="wy-admin-page">
-    <van-nav-bar title="合约管理" left-arrow @click-left="leftBack" />
+    <van-nav-bar title="审核管理" left-arrow @click-left="leftBack" />
     <Tabs :tabs="tabs" @tabsCall="setTabList"></Tabs>
 
     <!-- 合约列表 -->

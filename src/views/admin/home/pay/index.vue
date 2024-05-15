@@ -1,26 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { adminContractList, adminContractConfirm } from "@/api/admin";
-import {useRouter} from 'vue-router'
+import { adminContractList, adminPayConfirm } from "@/api/admin";
 import { showToast } from "vant";
-import Tabs from "@/components/Tabs.vue";
-import ProgressBar from "@/components/ProgressBar.vue";
-
-const tabs = [
-  {
-    type: 0,
-    text: "全部",
-  },
-  {
-    type: 3,
-    text: "履约中",
-  },
-  {
-    type: 4,
-    text: "已完成",
-  },
-];
-const router = useRouter()
 
 const state = reactive({
   type: 0, // tab类型
@@ -36,7 +17,7 @@ const state = reactive({
 const getContractList = async () => {
   state.loading = true;
   const res = await adminContractList({
-    is_contract_type: state.type,
+    is_contract_type: 4,
   });
 
   if (res) {
@@ -47,70 +28,20 @@ const getContractList = async () => {
   state.loading = false;
 };
 
-// 切换tab--接受自子组件
-const setTabList = (type: number) => {
-  if (state.type === type) return;
-  state.type = type;
-  getContractList();
-};
-
-// 跳转详情页
-const gotoDetail = (id: number) => {
-  router.push("/contract/details/" + id);
-};
-
-// 处理任务紧急程度文字
-const contractStateText = (num: number) => {
-  return num === 1 ? "正常" : num === 2 ? "风险" : "问题严重";
-};
-
-// 处理任务紧急程度数据
-const contractState = (item: any) => {
-  let str = "正常";
-  switch (true) {
-    case item.contract_IIII_state > 0:
-      return contractStateText(item.contract_IIII_state);
-      break;
-
-    case item.contract_III_state > 0:
-      return contractStateText(item.contract_IIII_state);
-      break;
-
-    case item.contract_II_state > 0:
-      return contractStateText(item.contract_IIII_state);
-      break;
-
-    case item.contract_I_state > 0:
-      return contractStateText(item.contract_IIII_state);
-      break;
-
-    default:
-      return str;
-      break;
-  }
-};
-
 // 完成合约按钮事件
-const completeContract = (item: any) => {
-  state.selectType = 4;
-  state.selectId = item.contract_id;
-  state.bool = true;
-};
-// 中止合约按钮事件
-const overContract = (item: any) => {
-  state.selectType = 5;
+const selectContract = (item: any) => {
   state.selectId = item.contract_id;
   state.bool = true;
 };
 
 // 弹窗确认事件
 const contractConfirm = async () => {
-  const res = await adminContractConfirm({
-    is_contract_type: state.selectType, // 4合约完成 5合约终止
-    contract_id: state.selectId,
+  const res = await adminPayConfirm({
+    "contract_id": state.selectId
   });
 
   if (res) {
+    showToast('发薪完成')
     getContractList();
   }
 
@@ -126,12 +57,10 @@ getContractList();
 
 <template>
   <div class="wy-admin-page">
-    <van-nav-bar title="合约管理" left-arrow @click-left="leftBack" />
-    <Tabs :tabs="tabs" @tabsCall="setTabList"></Tabs>
-
+    <van-nav-bar title="发薪管理" left-arrow @click-left="leftBack" />
     <!-- 合约列表 -->
     <van-pull-refresh
-      class="task-list"
+      class="pay-list-top"
       v-model="state.loading"
       success-text="刷新成功"
       @refresh="getContractList"
@@ -140,21 +69,24 @@ getContractList();
         class="home-contract-list"
         v-for="(item, index) in state.contractList"
         :key="index"
-        @click="gotoDetail((item as any).contract_id)"
       >
         <dl>
           <!-- 合约名称 -->
           <dt>
-            <h3>{{ item.contract_name }}</h3>
+            <h3>
+              {{ item.user_name }}
+              <i v-if="!item.settle_salary">审核通过</i>
+              <i v-else>审核中</i>
+            </h3>
           </dt>
 
           <!-- 合约内容 -->
           <dt>
-            <label for="">公司名称：</label>
-            <span>{{ item.company_name }}</span>
+            <label for="">合约名称：</label>
+            <span>{{ item.contract_name }}</span>
           </dt>
           <dt>
-            <label for="">任务薪资：</label>
+            <label for="">薪资发放：</label>
             <span>{{ item.task_salary }}/个</span>
           </dt>
           <dt>
@@ -166,39 +98,17 @@ getContractList();
             >
           </dt>
           <dt class="wy-flex">
-            <label for="">合约进度：</label>
-            <ProgressBar :item="item" />
+            <label for="">合约状态：</label>
+            <span>完成</span>
           </dt>
         </dl>
 
         <!-- 底部状态和按钮 -->
         <div class="home-contract-bottom">
-          <!-- 合约状态 -->
-          <div
-            :class="
-              contractState(item) === '风险'
-                ? 'origin'
-                : contractState(item) === '问题严重'
-                ? 'red'
-                : ''
-            "
-          >
-            <i></i>
-            <span>{{ contractState(item) }}</span>
-          </div>
-
-          <button
-            v-if="item.is_contract_type === 3"
-            @click="completeContract(item)"
-          >
-            完成合约
+          <button v-if="!item.settle_salary" @click="selectContract(item)">
+            发放薪资
           </button>
-          <button
-            v-if="item.is_contract_type === 3"
-            @click="overContract(item)"
-          >
-            中止合约
-          </button>
+          <button v-else class="opacity">发放薪资</button>
         </div>
       </div>
 
@@ -219,11 +129,8 @@ getContractList();
     >
       <div class="admin-contract-popup">
         <h5>温馨提示</h5>
-        <p v-if="state.selectType === 4">
-          当前合约进度已正常完成， <br />完成合约进行后续薪资发放。
-        </p>
-        <p v-if="state.selectType === 5">
-          当前合约进度存在异常， <br />经双方沟通决定终止合约。
+        <p >
+          确定将合约薪资发放吗？
         </p>
         <button @click="contractConfirm()">确定</button>
       </div>
@@ -234,7 +141,7 @@ getContractList();
 <style scoped lang="scss">
 // 解决下拉刷新高度不够
 .van-pull-refresh {
-  height: calc(100vh - 46px - 5rem);
+  height: calc(100vh - 4.8rem);
   overflow: auto;
 }
 
@@ -242,6 +149,10 @@ getContractList();
   background: #f6f6f6;
   height: 100vh;
   overflow: auto;
+
+  .pay-list-top {
+    margin-top: 0.64rem;
+  }
 
   .home-contract-list {
     background: #ffffff;
@@ -267,6 +178,15 @@ getContractList();
           color: #333333;
           line-height: 0.91rem;
           margin-bottom: 0.83rem;
+
+          i {
+            font-size: 0.64rem;
+            line-height: 0.64rem;
+            font-weight: 400;
+            color: #fe9215;
+            font-style: normal;
+            float: right;
+          }
         }
         label {
           font-size: 0.69rem;
@@ -288,48 +208,8 @@ getContractList();
       border-top: 1px solid #f5f5f5;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       padding: 0.6rem 0 0 0.2rem;
-
-      div {
-        width: 8rem;
-
-        i {
-          width: 0.37rem;
-          height: 0.37rem;
-          background: #50d400;
-          border-radius: 50%;
-          display: inline-block;
-        }
-
-        span {
-          font-size: 0.64rem;
-          line-height: 0.64rem;
-          font-weight: 400;
-          color: #50d400;
-          margin-left: 0.32rem;
-        }
-      }
-
-      div.origin {
-        i {
-          background: #fe9215;
-        }
-
-        span {
-          color: #fe9215;
-        }
-      }
-
-      div.red {
-        i {
-          background: #ff0000;
-        }
-
-        span {
-          color: #ff0000;
-        }
-      }
 
       button {
         width: 4rem;
@@ -343,6 +223,9 @@ getContractList();
         color: #ffffff;
         border: none;
       }
+      .opacity {
+        opacity: 0.3;
+      }
     }
   }
 
@@ -352,7 +235,7 @@ getContractList();
     h5 {
       font-size: 0.85rem;
       line-height: 0.85rem;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1rem;
       font-weight: 400;
       color: #333333;
       text-align: center;
@@ -363,7 +246,7 @@ getContractList();
       color: #333333;
       line-height: 1.28rem;
       text-align: center;
-      margin-bottom: 0.76rem;
+      margin-bottom: 1.76rem;
     }
     button {
       width: 10.99rem;

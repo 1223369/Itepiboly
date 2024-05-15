@@ -218,4 +218,13 @@ export const constantRoute: Array<RouteRecordRaw> = [
     path: "/admin/home/contract",
     component: () => import("@/views//admin/home/contract/index.vue"),
   },
+  {
+    path: "/admin/home/pay",
+    component: () => import("@/views//admin/home/pay/index.vue"),
+  },
+  {
+    path: "/admin/home/auditor",
+    component: () => import("@/views//admin/home/auditor/index.vue"),
+  },
+  
 ];
