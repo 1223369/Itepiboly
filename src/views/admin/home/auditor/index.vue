@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { adminAuditorTaskList } from "@/api/admin";
+import { adminAuditorTaskList, adminAuditorTalentList,adminAuditorCompanyList } from "@/api/admin";
 import { useRouter } from "vue-router";
 import { showToast } from "vant";
 import Tabs from "@/components/Tabs.vue";
@@ -47,11 +47,38 @@ const getAdminAuditorTaskList = async () => {
   state.loading = false;
 };
 
+// 获取人才审核列表
+const getAdminAuditorTalentList = async () => {
+  state.loading = true;
+  const res = await adminAuditorTalentList({});
+
+  if (res) {
+    state.talentList = res as any;
+  } else {
+    showToast(res.msg);
+  }
+  state.loading = false;
+};
+// 获取企业审核列表
+const getAdminAuditorCompanyList = async () => {
+  state.loading = true;
+  const res = await adminAuditorCompanyList({});
+
+  if (res) {
+    state.companyList = res as any;
+  } else {
+    showToast(res.msg);
+  }
+  state.loading = false;
+};
+
 // 切换tab--接受自子组件
 const setTabList = (type: number) => {
   if (state.type === type) return;
   state.type = type;
-  getAdminAuditorTaskList();
+  if (state.type === 0) getAdminAuditorTaskList();
+  if (state.type === 1) getAdminAuditorTalentList();
+  if (state.type === 2) getAdminAuditorCompanyList();
 };
 
 // 跳转详情页
@@ -61,7 +88,7 @@ const gotoDetail = (id: number) => {
       router.push("/admin/home/auditor/task/" + id);
       break;
     case state.type === 1:
-      router.push("/admin/home/auditor/task/" + id);
+      router.push("/admin/home/auditor/talent/" + id);
       break;
     case state.type === 2:
       router.push("/admin/home/auditor/company/" + id);
@@ -141,43 +168,33 @@ getAdminAuditorTaskList();
     <!-- 个人认证列表 -->
     <div v-if="state.type === 1">
       <van-pull-refresh
-        class="task-list"
         v-model="state.loading"
         success-text="刷新成功"
-        @refresh="getAdminAuditorTaskList"
+        @refresh="getAdminAuditorTalentList"
       >
         <dl
-          v-for="(item, index) in state.taskList"
+          v-for="(item, index) in state.talentList"
           :key="index"
-          @click="gotoDetail((item as any).task_id)"
+          @click="gotoDetail((item as any).id)"
         >
-          <!-- 合约名称 -->
-          <dt>
-            <h3>
-              {{ item.task_name }}
-              <i v-if="item.is_check === 0">未审核</i>
-              <i v-if="item.is_check === 1">审核通过</i>
-              <i v-if="item.is_check === 2">审核失败</i>
-              <i v-if="item.is_check === 3">已关闭</i>
-            </h3>
+          <dt class="auditor-flex">
+            <div>
+              <img :src="item.it_head" />
+            </div>
+            <div class="auditor-flex-right">
+              <h3>
+                {{ item.real_name }}
+                <i v-if="item.is_check === 0">未审核</i>
+                <i v-if="item.is_check === 1">审核通过</i>
+                <i v-if="item.is_check === 2">审核失败</i>
+              </h3>
+              <span
+                >{{ item.sex }} ｜ {{ item.age }} ｜ {{ item.work_year }} ｜
+                {{ item.city }}</span
+              >
+            </div>
           </dt>
 
-          <dt>
-            <label for="">任务预算：</label>
-            <span>{{ item.task_budget }}</span>
-          </dt>
-          <dt>
-            <label for="">任务周期：</label>
-            <span>{{ item.task_cycle }}/个</span>
-          </dt>
-          <dt>
-            <label for="">服务方式：</label>
-            <span>{{ item.service_mode }} </span>
-          </dt>
-          <dt>
-            <label for="">任务要求：</label>
-            <span>{{ item.task_ask }}</span>
-          </dt>
           <dd>
             <button>操作审核</button>
           </dd>
@@ -194,7 +211,41 @@ getAdminAuditorTaskList();
     </div>
 
     <!-- 企业认证列表 -->
-    <div v-if="state.type === 2"></div>
+    <div v-if="state.type === 2">
+      <van-pull-refresh
+        v-model="state.loading"
+        @refresh="getAdminAuditorCompanyList"
+      >
+        <dl
+          v-for="(item, index) in state.companyList"
+          :key="index"
+          @click="gotoDetail(item.id)"
+        >
+          <dt>
+            <h3>
+              {{ item.company_name }}
+              <i v-if="item.is_check === 0">未审核</i>
+              <i v-if="item.is_check === 1">审核通过</i>
+              <i v-if="item.is_check === 2">审核失败</i>
+            </h3>
+          </dt>
+          <dt>
+            <label>企业法人:</label>
+            <span>{{ item.contacts }}</span>
+          </dt>
+          <dd>
+            <button>操作审核</button>
+          </dd>
+        </dl>
+        <van-loading v-if="state.loading">加载中...</van-loading>
+        <div
+          class="wy-no-data"
+          v-if="!state.loading && state.companyList.length == 0"
+        >
+          暂无数据
+        </div>
+      </van-pull-refresh>
+    </div>
   </div>
 </template>
 
@@ -272,6 +323,22 @@ getAdminAuditorTaskList();
         text-align: center;
         float: right;
       }
+    }
+  }
+
+  .auditor-flex {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 2.67rem;
+      height: 2.67rem;
+      border-radius: 50%;
+      margin-right: 0.8rem;
+    }
+
+    .auditor-flex-right {
+      flex: 1;
     }
   }
 }

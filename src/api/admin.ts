@@ -53,3 +53,93 @@ export function adminAuditorTaskEdit(data: any) {
     data,
   });
 }
+
+// 管理员端-审核管理-人才列表接口
+export function adminAuditorTalentList(data: any) {
+  return request({
+    url: "/admin/home/auditor/talent/list",
+    method: "GET",
+    params: data,
+  });
+}
+
+// 管理员端-审核管理-人才详情接口
+export function adminAuditorTalentDetail(data: any) {
+  return request({
+    url: "/admin/home/auditor/talent/detail",
+    method: "GET",
+    params: data,
+  });
+}
+
+// 管理员端-审核管理-人才操作审核接口
+export function adminAuditorTalentEdit(data: any) {
+  return request({
+    url: "/admin/home/auditor/talent/edit",
+    method: "POST",
+    data,
+  });
+}
+
+// 管理员端-审核管理-企业列表接口
+export function adminAuditorCompanyList(data: any) {
+  return request({
+    url: "/admin/home/auditor/company/list",
+    method: "GET",
+    params: data,
+  });
+}
+
+// 管理员端-审核管理-企业详情接口
+export function adminAuditorCompanyDetail(data: any) {
+  return request({
+    url: "/admin/home/auditor/company/detail",
+    method: "GET",
+    params: data,
+  });
+}
+
+// 管理员端-审核管理-企业操作审核接口
+export function adminAuditorCompanyEdit(data: any) {
+  return request({
+    url: "/admin/home/auditor/company/edit",
+    method: "POST",
+    data,
+  });
+}
+
+// 管理员端-用户管理-用户列表接口
+export function adminUserUserList(data: any) {
+  return request({
+    url: "/admin/home/user/user/list",
+    method: "GET",
+    params: data,
+  });
+}
+
+// 管理员端-审核管理-用户操作接口
+export function adminUserUserConfirm(data: any) {
+  return request({
+    url: "/admin/home/user/user/confirm",
+    method: "POST",
+    data,
+  });
+}
+
+// 管理员端-用户管理-企业列表接口
+export function adminUserCompanyList(data: any) {
+  return request({
+    url: "/admin/home/user/company/list",
+    method: "GET",
+    params: data,
+  });
+}
+
+// 管理员端-审核管理-企业操作接口
+export function adminUserCompanyConfirm(data: any) {
+  return request({
+    url: "/admin/home/user/company/confirm",
+    method: "POST",
+    data,
+  });
+}
