@@ -2,6 +2,8 @@
 import { ref } from "vue";
 import FooterTabbar from "@/components/FooterTabbar.vue";
 import CharLine from "./components/CharLine.vue";
+import CharBar from "./components/CharBar.vue";
+import CharPie from "./components/CharPie.vue";
 import { adminHomeChart } from "@/api/admin";
 
 const state = ref({
@@ -66,12 +68,18 @@ getAdminHomeChart();
     <!-- 新增入驻(周) -->
     <div class="admin-title">
       <h3>新增入驻(周)<i></i></h3>
+      <dl>
+        <dt>人才</dt>
+        <dd>企业</dd>
+      </dl>
     </div>
+    <CharBar v-if="state.chartData.bar" :data="state.chartData.bar" />
 
     <!-- 人才年龄比例 -->
     <div class="admin-title">
       <h3>人才年龄比例<i></i></h3>
     </div>
+    <CharPie v-if="state.chartData.pie" :data="state.chartData.pie" />
   </div>
 
   <!-- 底部导航栏 -->

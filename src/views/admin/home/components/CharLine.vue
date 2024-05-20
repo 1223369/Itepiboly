@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import { ref, inject, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 
-// 接收App.vue注入的echars
-const echars = inject("echars");
 
 // 接收父组件传参
 const props = defineProps({
