@@ -6,7 +6,7 @@ const router = useRouter();
 //接收父组件传过来的参数
 const props = defineProps({
   messageList: {
-    type: Array,
+    type: Array<any>,
     default: () => [],
   },
   type: {

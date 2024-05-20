@@ -2,7 +2,8 @@
 import { reactive } from "vue";
 const props = defineProps({
   tabs: {
-    type: Array,
+    type: Array<any>,
+      default: () => [],
   },
 });
 const state = reactive({
@@ -11,7 +12,7 @@ const state = reactive({
 
 // 向父组件传递
 const emit = defineEmits(["tabsCall"]);
-const setTabList = (type) => {
+const setTabList = (type: any) => {
   state.type = type;
   emit("tabsCall", type);
 };
