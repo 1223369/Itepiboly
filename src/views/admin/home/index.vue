@@ -1,5 +1,23 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import FooterTabbar from "@/components/FooterTabbar.vue";
+import CharLine from "./components/CharLine.vue";
+import { adminHomeChart } from "@/api/admin";
+
+const state = ref({
+  chartData: {}, // 图表数据
+});
+
+// 获取图表数据
+const getAdminHomeChart = async () => {
+  const res = await adminHomeChart({});
+  if (res) {
+    state.value.chartData = res;
+  }
+};
+
+// 函数调用
+getAdminHomeChart();
 </script>
 
 <template>
@@ -38,7 +56,12 @@ import FooterTabbar from "@/components/FooterTabbar.vue";
     <!-- 合约数据(周) -->
     <div class="admin-title">
       <h3>合约数据(周)<i></i></h3>
+      <dl>
+        <dt>上周</dt>
+        <dd>下周</dd>
+      </dl>
     </div>
+    <CharLine v-if="state.chartData.line" :data="state.chartData.line" />
 
     <!-- 新增入驻(周) -->
     <div class="admin-title">
@@ -99,6 +122,35 @@ import FooterTabbar from "@/components/FooterTabbar.vue";
         left: -0.1rem;
         top: 0.4rem;
         opacity: 0.4;
+      }
+    }
+
+    dl {
+      display: flex;
+      font-size: 0.59rem;
+      line-height: 0.59rem;
+      font-weight: 400;
+      color: #666666;
+      dt {
+        margin-right: 0.77rem;
+      }
+      dt::before {
+        content: "";
+        width: 0.37rem;
+        height: 0.37rem;
+        background: #6da6ea;
+        border-radius: 50%;
+        margin-right: 0.24rem;
+        display: inline-block;
+      }
+      dd::before {
+        content: "";
+        width: 0.37rem;
+        height: 0.37rem;
+        background: #fbc605;
+        border-radius: 50%;
+        margin-right: 0.24rem;
+        display: inline-block;
       }
     }
   }

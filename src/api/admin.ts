@@ -143,3 +143,12 @@ export function adminUserCompanyConfirm(data: any) {
     data,
   });
 }
+
+// 管理员端-首页图表数据接口
+export function adminHomeChart(data: any) {
+  return request({
+    url: "/admin/home/chart",
+    method: "GET",
+    params: data,
+  });
+}

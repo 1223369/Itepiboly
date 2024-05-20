@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { KeepAlive } from "vue";
+import { KeepAlive, provide } from "vue";
+// 引入echars
+import * as echarts from 'echarts';
+// 注册echarts
+provide('echarts', echarts);
 </script>
 
 <template>
