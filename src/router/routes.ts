@@ -171,6 +171,10 @@ export const constantRoute: Array<RouteRecordRaw> = [
     component: () => import("@/views/my/partner/company.vue"),
   },
   {
+    path: "/my/partner/admin",
+    component: () => import("@/views/my/partner/admin.vue"),
+  },
+  {
     path: "/my/task",
     component: () => import("@/views/my/task/index.vue"),
   },

@@ -4,8 +4,8 @@ import { myStore } from "@/store/my";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import CustomerManager from "./components/CustomerManager.vue";
-import { myAllCount } from '@/api/my'
- 
+import { myAllCount } from "@/api/my";
+
 const store = myStore();
 const router = useRouter();
 
@@ -15,12 +15,12 @@ const state = ref({
 });
 
 // 获取企业端任务、合约、体验金数据
-const getMyAllCount = async() => {
-  const res = await myAllCount()
+const getMyAllCount = async () => {
+  const res = await myAllCount();
   if (res) {
-    state.value.count = res[0]
+    state.value.count = res[0];
   }
-}
+};
 
 const gotoPage = (path: string) => {
   router.push(path);
@@ -31,8 +31,7 @@ if (!store.userInfo.user_name) {
 }
 
 // 函数调用
-getMyAllCount()
-
+getMyAllCount();
 </script>
 
 <template>
@@ -59,7 +58,7 @@ getMyAllCount()
           }}
         </p>
       </div>
-      <i @click="gotoPage('/my/account')"></i>
+      <i v-if="store.userInfo.role != 2" @click="gotoPage('/my/account')"></i>
     </div>
 
     <!-- 人才端我的收藏部分 -->
@@ -99,7 +98,7 @@ getMyAllCount()
     </div>
 
     <!-- 人才端以及企业端我的合约部分 -->
-    <div class="my-contract">
+    <div class="my-contract" v-if="store.userInfo.role != 2">
       <div class="my-title">
         <h3>我的合约</h3>
         <span @click="gotoPage('/my/contract/0')"
@@ -132,7 +131,7 @@ getMyAllCount()
     </div>
 
     <!-- 常用功能部分 -->
-    <div class="my-common">
+    <div class="my-common" v-if="store.userInfo.role != 2">
       <div class="my-title">
         <h3>常用功能</h3>
       </div>
@@ -175,7 +174,7 @@ getMyAllCount()
         ></span>
       </div>
     </div>
-    <div class="my-common">
+    <div class="my-common" v-if="store.userInfo.role != 2">
       <div class="my-item" @click="gotoPage('/my/feedback')">
         <img src="@/assets/img/my/icon-feedback.png" alt="" />
         <label for="">意见反馈</label>
@@ -187,6 +186,23 @@ getMyAllCount()
         <span><van-icon name="arrow"></van-icon></span>
       </div>
     </div>
+    <div class="my-common-1" v-if="store.userInfo.role === 2">
+      <div class="my-common">
+        <div class="my-item" @click="gotoPage('/my/feedback')">
+          <img src="@/assets/img/my/icon-feedback.png" alt="" />
+          <label for="">意见反馈</label>
+          <span><van-icon name="arrow"></van-icon></span>
+        </div>
+      </div>
+      <div class="my-common">
+        <div class="my-item" @click="gotoPage('/my/about')">
+          <img src="@/assets/img/my/icon-about.png" alt="" />
+          <label for="">关于我们</label>
+          <span><van-icon name="arrow"></van-icon></span>
+        </div>
+      </div>
+    </div>
+
     <div class="my-common">
       <div class="my-item" @click="gotoPage('/my/user/identitySwitch')">
         <img src="@/assets/img/my/icon-switch-role.png" alt="" />
@@ -249,6 +265,7 @@ getMyAllCount()
   background: #fbfbfb url(@/assets/img/my/top-background.png) center -0.8rem no-repeat;
   background-size: contain;
   overflow: auto;
+  height: calc(100vh - 4.5rem);
 
   // 个人信息部分
   .my-info {
@@ -468,6 +485,9 @@ getMyAllCount()
     .my-item:last-child {
       border-bottom: 0;
     }
+  }
+  .my-common-1 {
+    background: #ffffff;
   }
 }
 </style>

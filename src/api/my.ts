@@ -288,3 +288,12 @@ export function addEnterprise(data: any) {
     data,
   });
 }
+
+// 管理端管理员入驻申请接口
+export function addManage(data: any) {
+  return request({
+    url: "/settlein/manage/add",
+    method: "POST",
+    data,
+  });
+}
